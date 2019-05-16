@@ -11,6 +11,7 @@ require("./models/User");
 
 // Load Routes
 const auth = require("./routes/api/auth");
+const books = require("./routes/api/books");
 const oauth = require("./routes/oauth/auth");
 
 // Config Environment Vars
@@ -53,6 +54,7 @@ require("./config/passport")(passport);
 
 // Use Routes
 app.use("/api/auth", auth);
+app.use("/api/books", books);
 app.use("/auth", oauth);
 
 // Serve static assets in production
