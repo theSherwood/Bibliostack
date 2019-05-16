@@ -76,7 +76,7 @@ router.post(
     let { title, author, budget } = req.body;
     title = title.trim();
     author = author.trim();
-    budget = budget.trim();
+    budget = budget.trim() || "100000";
     let searchTerm = title + " " + author;
     console.log(title, author, budget);
     if (!searchTerm.trim()) {
