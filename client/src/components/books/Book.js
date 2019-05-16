@@ -38,6 +38,10 @@ const styles = theme => ({
   root: {
     width: "100%"
   },
+  summary: {
+    boxShadow:
+      "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)"
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15)
   },
@@ -51,7 +55,8 @@ const styles = theme => ({
     width: 20
   },
   details: {
-    alignItems: "center"
+    alignItems: "center",
+    paddingBottom: "10px"
   },
   column: {
     flexBasis: "33.33%"
@@ -141,6 +146,7 @@ const Book = props => {
     <div className={classes.root}>
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
+          className={classes.summary}
           onClick={handlePanelClick}
           expandIcon={<ExpandMoreIcon />}
         >
@@ -148,11 +154,13 @@ const Book = props => {
           <TextField value={author} onChange={e => setAuthor(e.target.value)} />
           <TextField value={budget} onChange={e => setBudget(e.target.value)} />
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
-          {fetching ? <p>Fetching results...</p> : null}
-          {error ? error.message : null}
-          {resultsContent}
-        </ExpansionPanelDetails>
+        {fetching || error || resultsContent ? (
+          <ExpansionPanelDetails className={classes.details}>
+            {fetching ? <p>Fetching results...</p> : null}
+            {error ? error.message : null}
+            {resultsContent}
+          </ExpansionPanelDetails>
+        ) : null}
         {/* <Divider /> */}
         <ExpansionPanelActions>
           <Button size="small" onClick={() => fetchBooks()}>
