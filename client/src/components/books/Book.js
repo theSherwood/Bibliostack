@@ -90,22 +90,32 @@ const Book = props => {
         .post("/api/books/book", body)
         .then(res => {
           const books = res.data;
-          console.log(books);
           dispatch({ type: "setEbayBookResult", payload: books });
         })
         .catch(err => dispatch({ type: "setError", payload: err }));
     }
   }, [fetchResults]);
 
+  const handlePanelClick = e => {
+    if (
+      !(
+        e.target.matches(".MuiInputBase-input-178") ||
+        e.target.matches(".MuiInput-input-163")
+      )
+    ) {
+      setExpanded(!expanded);
+    }
+  };
+
   return (
     <div className={classes.root}>
       <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon onClick={() => setExpanded(!expanded)} />}
+          onClick={handlePanelClick}
+          expandIcon={<ExpandMoreIcon />}
         >
-          <TextField onClick={() => console.log("hello")} />
-          {"  "} <TextField />
-          {"   "}
+          <TextField />
+          <TextField />
           <TextField />
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
