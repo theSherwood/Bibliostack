@@ -20,6 +20,7 @@ import Booklist from "./components/books/Booklist";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
+import { withStyles } from "@material-ui/core/styles";
 
 import "./App.css";
 
@@ -31,20 +32,26 @@ if (token) {
   store.dispatch(setUser(decodedUser));
 }
 
-export default function App() {
+const styles = {
+  app: {
+    minHeight: "100vh",
+    position: "relative",
+    paddingBottom: 100,
+    [theme.breakpoints.down(600)]: {
+      paddingBottom: 40
+    }
+  }
+};
+
+function App(props) {
+  const { classes } = props;
+
   return (
     <Provider store={store}>
       <CssBaseline />
       <MuiThemeProvider theme={theme}>
         <Router>
-          <div
-            className="App"
-            style={{
-              minHeight: "100vh",
-              position: "relative",
-              paddingBottom: "100px"
-            }}
-          >
+          <div className={"App " + classes.app}>
             <Header />
             <div>
               <Switch>
@@ -64,3 +71,5 @@ export default function App() {
     </Provider>
   );
 }
+
+export default withStyles(styles)(App);

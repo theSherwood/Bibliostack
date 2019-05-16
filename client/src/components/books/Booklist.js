@@ -17,6 +17,11 @@ const styles = theme => ({
       width: 700,
       marginLeft: "auto",
       marginRight: "auto"
+    },
+    [theme.breakpoints.down(600)]: {
+      width: "100%",
+      marginLeft: 0,
+      marginRight: 0
     }
   },
   paper: {
@@ -25,7 +30,12 @@ const styles = theme => ({
     flexDirection: "column",
     // alignItems: "center",
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
+      .spacing.unit * 3}px`,
+    [theme.breakpoints.down(600)]: {
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      marginTop: 0
+    }
   },
   avatar: {
     margin: theme.spacing.unit,
