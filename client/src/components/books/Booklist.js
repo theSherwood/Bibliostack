@@ -50,15 +50,27 @@ const styles = theme => ({
   }
 });
 
+const mockDB = [
+  {
+    title: "lord of the rings",
+    author: "tolkien",
+    budget: "5"
+  },
+  {
+    title: "silmarillion",
+    author: "tolkien",
+    budget: "5"
+  },
+  {
+    title: "catcher in the rye",
+    budget: "4"
+  }
+];
+
 const Booklist = props => {
   const { classes } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
-
-  const mockArray = [];
-  for (let i = 0; i < 5; i++) {
-    mockArray.push(i);
-  }
 
   return (
     <main className={classes.main}>
@@ -72,8 +84,13 @@ const Booklist = props => {
           Fetch Results
         </Button>
         <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
-        {mockArray.map((val, i) => (
-          <Book key={i} fetchResults={fetchResults} expand={expand} />
+        {mockDB.map((book, i) => (
+          <Book
+            key={i}
+            fetchResults={fetchResults}
+            expand={expand}
+            book={book}
+          />
         ))}
       </Paper>
     </main>
