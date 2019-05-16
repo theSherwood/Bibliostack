@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getBooks } from "../../actions/bookActions";
 import { connect } from "react-redux";
 import compose from "recompose/compose";
 import Book from "./Book";
 import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core";
 
 const styles = theme => ({
@@ -22,7 +23,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 8,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    // alignItems: "center",
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
       .spacing.unit * 3}px`
   },
@@ -41,6 +42,8 @@ const styles = theme => ({
 
 const Booklist = props => {
   const { classes, getBooks } = props;
+  const [fetchResults, setFetchResults] = useState(0);
+  const [expand, setExpand] = useState(false);
 
   // useEffect(() => {
   //   getBooks();
@@ -54,8 +57,12 @@ const Booklist = props => {
   return (
     <main className={classes.main}>
       <Paper className={classes.paper}>
+        <Button onClick={() => setFetchResults(fetchResults + 1)}>
+          Fetch Results
+        </Button>
+        <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
         {mockArray.map((val, i) => (
-          <Book key={i} />
+          <Book key={i} fetchResults={fetchResults} expand={expand} />
         ))}
       </Paper>
     </main>
