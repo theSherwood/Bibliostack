@@ -7,6 +7,7 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -40,7 +41,11 @@ const styles = theme => ({
   },
   summary: {
     boxShadow:
-      "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)"
+      "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+    [theme.breakpoints.down(600)]: {
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 4
+    }
   },
   heading: {
     fontSize: theme.typography.pxToRem(15)
@@ -71,17 +76,30 @@ const styles = theme => ({
     "&:hover": {
       textDecoration: "underline"
     }
+  },
+  gridItem: {
+    [theme.breakpoints.down(600)]: {
+      paddingLeft: theme.spacing.unit,
+      paddingTop: 2,
+      paddingBottom: 2
+    }
+  },
+  grow: {
+    flexGrow: 1
+  },
+  textField: {
+    width: "100%"
   }
 });
 
 const Book = props => {
-  const { fetchResults, classes, expand } = props;
+  const { fetchResults, classes, expand, book } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const { ebayBookResult, fetching, error } = state;
   const [expanded, setExpanded] = useState(false);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [budget, setBudget] = useState("");
+  const [title, setTitle] = useState(book.title || "");
+  const [author, setAuthor] = useState(book.author || "");
+  const [budget, setBudget] = useState(book.budget || "");
 
   useEffect(() => {
     setExpanded(expand);
@@ -104,18 +122,13 @@ const Book = props => {
       .post("/api/books/book", body)
       .then(res => {
         const books = res.data;
-        dispatch({ type: "setEbayBookResult", payload: books });
+        dispatch({ type: "setEbayBookResult", payload: books || [] });
       })
       .catch(err => dispatch({ type: "setError", payload: err }));
   };
 
   const handlePanelClick = e => {
-    if (
-      !(
-        e.target.matches(".MuiInputBase-input-178") ||
-        e.target.matches(".MuiInput-input-163")
-      )
-    ) {
+    if (!e.target.matches("input")) {
       setExpanded(!expanded);
     }
   };
@@ -150,9 +163,31 @@ const Book = props => {
           onClick={handlePanelClick}
           expandIcon={<ExpandMoreIcon />}
         >
-          <TextField value={title} onChange={e => setTitle(e.target.value)} />
-          <TextField value={author} onChange={e => setAuthor(e.target.value)} />
-          <TextField value={budget} onChange={e => setBudget(e.target.value)} />
+          <div className={classes.grow}>
+            <Grid container spacing={8}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  className={classes.textField}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  value={author}
+                  onChange={e => setAuthor(e.target.value)}
+                  className={classes.textField}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  value={budget}
+                  onChange={e => setBudget(e.target.value)}
+                  className={classes.textField}
+                />
+              </Grid>
+            </Grid>
+          </div>
         </ExpansionPanelSummary>
         {fetching || error || resultsContent ? (
           <ExpansionPanelDetails className={classes.details}>
