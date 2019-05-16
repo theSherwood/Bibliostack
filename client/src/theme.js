@@ -10,6 +10,9 @@ const theme = createMuiTheme({
   },
   shape: {
     borderRadius: 0
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 
