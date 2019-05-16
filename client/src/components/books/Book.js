@@ -13,18 +13,18 @@ import axios from "axios";
 
 const initialState = {
   fetching: false,
-  ebayBookResult: [],
+  ebayBookResult: null,
   error: null
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "fetching":
-      return { ...state, fetching: true };
+      return { ...state, fetching: true, ebayBookResult: null };
     case "setEbayBookResult":
       return { ...state, fetching: false, ebayBookResult: action.payload };
     case "clearResult":
-      return { ...state, ebayBookResult: [] };
+      return { ...state, ebayBookResult: null };
     case "setError":
       return { ...state, fetching: false, error: action.payload };
     case "clearError":
@@ -72,7 +72,11 @@ const styles = theme => ({
 const Book = props => {
   const { fetchResults, classes, expand } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { ebayBookResult, fetching, error } = state;
   const [expanded, setExpanded] = useState(false);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [budget, setBudget] = useState("");
 
   useEffect(() => {
     setExpanded(expand);
@@ -80,21 +84,25 @@ const Book = props => {
 
   useEffect(() => {
     if (fetchResults) {
-      dispatch({ type: "fetching" });
-      const body = {
-        title: "the lord of the rings",
-        author: "Tolkien",
-        price: ""
-      };
-      axios
-        .post("/api/books/book", body)
-        .then(res => {
-          const books = res.data;
-          dispatch({ type: "setEbayBookResult", payload: books });
-        })
-        .catch(err => dispatch({ type: "setError", payload: err }));
+      fetchBooks();
     }
   }, [fetchResults]);
+
+  const fetchBooks = () => {
+    dispatch({ type: "fetching" });
+    const body = {
+      title,
+      author,
+      budget
+    };
+    axios
+      .post("/api/books/book", body)
+      .then(res => {
+        const books = res.data;
+        dispatch({ type: "setEbayBookResult", payload: books });
+      })
+      .catch(err => dispatch({ type: "setError", payload: err }));
+  };
 
   const handlePanelClick = e => {
     if (
@@ -107,6 +115,28 @@ const Book = props => {
     }
   };
 
+  let resultsContent;
+  if (ebayBookResult) {
+    resultsContent =
+      ebayBookResult.length > 0 ? (
+        <ul>
+          {ebayBookResult.map(book => {
+            const currentPrice = book.sellingStatus[0].currentPrice[0];
+            const currency = currentPrice["@currencyId"];
+            const value = currentPrice["__value__"];
+            return (
+              <li key={book.itemId[0]}>
+                {currency} {value + " : "}
+                <Typography noWrap={true}>{book.title[0]}</Typography>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>No results found</p>
+      );
+  }
+
   return (
     <div className={classes.root}>
       <ExpansionPanel expanded={expanded}>
@@ -114,34 +144,24 @@ const Book = props => {
           onClick={handlePanelClick}
           expandIcon={<ExpandMoreIcon />}
         >
-          <TextField />
-          <TextField />
-          <TextField />
+          <TextField value={title} onChange={e => setTitle(e.target.value)} />
+          <TextField value={author} onChange={e => setAuthor(e.target.value)} />
+          <TextField value={budget} onChange={e => setBudget(e.target.value)} />
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          {state.fetching ? <p>Fetching results...</p> : null}
-          {state.error ? state.error.message : null}
-          <ul>
-            {state.ebayBookResult.map(book => {
-              const currentPrice = book.sellingStatus[0].currentPrice[0];
-              const currency = currentPrice["@currencyId"];
-              const value = currentPrice["__value__"];
-              return (
-                <li key={book.itemId[0]}>
-                  {currency} {value + " : "}
-                  <Typography noWrap={true}>{book.title[0]}</Typography>
-                </li>
-              );
-            })}
-          </ul>
+          {fetching ? <p>Fetching results...</p> : null}
+          {error ? error.message : null}
+          {resultsContent}
         </ExpansionPanelDetails>
-        {/* <Divider />
+        {/* <Divider /> */}
         <ExpansionPanelActions>
-          <Button size="small">Cancel</Button>
-          <Button size="small" color="primary">
-            Save
+          <Button size="small" onClick={() => fetchBooks()}>
+            Fetch Results
           </Button>
-        </ExpansionPanelActions> */}
+          {/* <Button size="small" color="primary">
+            Save
+          </Button> */}
+        </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
   );

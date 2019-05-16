@@ -73,13 +73,21 @@ router.post(
   "/book",
   // passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    let { title } = req.body;
-    title = encodeURIComponent(title);
+    let { title, author, budget } = req.body;
+    title = title.trim();
+    author = author.trim();
+    budget = budget.trim();
+    let searchTerm = title + " " + author;
+    console.log(title, author, budget);
+    if (!searchTerm.trim()) {
+      return res.send([]);
+    }
+    searchTerm = encodeURIComponent(title + " " + author);
     // console.log(title);
 
-    const filterarray = constructFilterArray("5", "USD");
+    const filterarray = constructFilterArray(budget, "USD");
     const urlfilter = buildURLArray(filterarray);
-    const url = constructURL(urlfilter, title, "US", "3");
+    const url = constructURL(urlfilter, searchTerm, "US", "3");
 
     fetch(url)
       .then(ebayResponse => {
