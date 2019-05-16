@@ -41,13 +41,9 @@ const styles = theme => ({
 });
 
 const Booklist = props => {
-  const { classes, getBooks } = props;
+  const { classes } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
-
-  // useEffect(() => {
-  //   getBooks();
-  // }, []);
 
   const mockArray = [];
   for (let i = 0; i < 5; i++) {
@@ -57,7 +53,12 @@ const Booklist = props => {
   return (
     <main className={classes.main}>
       <Paper className={classes.paper}>
-        <Button onClick={() => setFetchResults(fetchResults + 1)}>
+        <Button
+          onClick={() => {
+            setExpand(true);
+            setFetchResults(fetchResults + 1);
+          }}
+        >
           Fetch Results
         </Button>
         <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
