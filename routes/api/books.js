@@ -71,47 +71,42 @@ function constructURL(urlfilter, searchTerm, siteLocationCode, numEntries) {
 }
 
 // @route     POST /api/books/book
-// @desc      Return books
-// @access    Private
-router.post(
-  "/book",
-  // passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    let { title, author, budget } = req.body;
-    title = title.trim();
-    author = author.trim();
-    budget = budget.trim();
-    budget = !isNaN(parseFloat(budget)) && isFinite(budget) ? budget : "100000";
-    let searchTerm = title + " " + author;
-    if (!searchTerm.trim()) {
-      return res.send([]);
-    }
-    searchTerm = encodeURIComponent(title + " " + author);
-    // console.log(title);
-
-    const filterarray = constructFilterArray(budget, "USD");
-    const urlfilter = buildURLArray(filterarray);
-    const url = constructURL(urlfilter, searchTerm, "US", "3");
-
-    fetch(url)
-      .then(ebayResponse => {
-        return ebayResponse.text();
-      })
-      .then(text => {
-        const parsedResponse = JSON.parse(text);
-        const results =
-          parsedResponse.findItemsByKeywordsResponse[0].searchResult[0].item;
-        return res.json(results);
-      });
+// @desc      Search for book on ebay
+// @access    Public
+router.post("/book", (req, res) => {
+  let { title, author, budget } = req.body;
+  title = title.trim();
+  author = author.trim();
+  budget = budget.trim();
+  budget = !isNaN(parseFloat(budget)) && isFinite(budget) ? budget : "100000";
+  let searchTerm = title + " " + author;
+  if (!searchTerm.trim()) {
+    return res.send([]);
   }
-);
+  searchTerm = encodeURIComponent(title + " " + author);
+
+  const filterarray = constructFilterArray(budget, "USD");
+  const urlfilter = buildURLArray(filterarray);
+  const url = constructURL(urlfilter, searchTerm, "US", "3");
+
+  fetch(url)
+    .then(ebayResponse => {
+      return ebayResponse.text();
+    })
+    .then(text => {
+      const parsedResponse = JSON.parse(text);
+      const results =
+        parsedResponse.findItemsByKeywordsResponse[0].searchResult[0].item;
+      return res.json(results);
+    });
+});
 
 // @route     POST /api/books/booklist
 // @desc      Save books to database
 // @access    Private
 router.post(
   "/booklist",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findById(req.user.id)
       .then(user => {
@@ -127,7 +122,7 @@ router.post(
 // @access    Private
 router.get(
   "/booklist",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findById(req.user.id)
       .then(user => {
