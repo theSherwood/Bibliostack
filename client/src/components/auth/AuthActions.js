@@ -40,25 +40,15 @@ export const signInUser = (formData, history, dispatch) => {
     .then(res => {
       // Save to local storage
       const { token } = res.data;
-      dispatch(handleJWT(token, history, dispatch));
+      handleJWT(token, history, dispatch);
     })
     .catch(err => err);
-};
-
-// Sign Out user
-export const signOutUser = dispatch => {
-  // Remove token from local storage
-  localStorage.removeItem("jwtToken");
-  // Remove token from axios header
-  axiosConfigToken(false);
-  // Set user to empty object
-  dispatch({ type: "signout" });
 };
 
 // Sign Up user
 export const signUpUser = (formData, history, dispatch) => {
   return axios
     .post("/api/auth/signup", formData)
-    .then(res => history.push("/booklist"))
+    .then(res => history.push("/sign/in"))
     .catch(err => err);
 };
