@@ -4,16 +4,11 @@ const isEmpty = require("./is-empty");
 module.exports = function validateSignUpInput(data) {
   let errors = {};
 
-  data.handle = !isEmpty(data.handle) ? data.handle : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
   data.confirmPassword = !isEmpty(data.confirmPassword)
     ? data.confirmPassword
     : "";
-
-  if (!validator.isLength(data.handle, { min: 2, max: 30 })) {
-    errors.handle = "Handle must be between 2 and 30 characters";
-  }
 
   if (!validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
@@ -27,9 +22,6 @@ module.exports = function validateSignUpInput(data) {
     errors.confirmPassword = "Passwords must match";
   }
 
-  if (validator.isEmpty(data.handle)) {
-    errors.handle = "Handle field is required";
-  }
   if (validator.isEmpty(data.email)) {
     errors.email = "Email field is required";
   }
