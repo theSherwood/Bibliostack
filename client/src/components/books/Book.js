@@ -129,8 +129,12 @@ const Book = props => {
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   className={classes.textField}
+                  autoFocus
                   onBlur={() =>
-                    updateBooklist({ title, author, budget }, index)
+                    updateBooklist(
+                      { title, author, budget, _id: book._id },
+                      index
+                    )
                   }
                 />
               </Grid>
@@ -140,7 +144,10 @@ const Book = props => {
                   onChange={e => setAuthor(e.target.value)}
                   className={classes.textField}
                   onBlur={() =>
-                    updateBooklist({ title, author, budget }, index)
+                    updateBooklist(
+                      { title, author, budget, _id: book._id },
+                      index
+                    )
                   }
                 />
               </Grid>
@@ -150,7 +157,10 @@ const Book = props => {
                   onChange={e => setBudget(e.target.value)}
                   className={classes.textField}
                   onBlur={() =>
-                    updateBooklist({ title, author, budget }, index)
+                    updateBooklist(
+                      { title, author, budget, _id: book._id },
+                      index
+                    )
                   }
                 />
               </Grid>
