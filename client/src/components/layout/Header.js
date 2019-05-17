@@ -46,6 +46,8 @@ import Collapse from "@material-ui/core/Collapse";
 import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import { Link as RouterLink } from "react-router-dom";
+import axiosConfigToken from "../../helpers/axiosConfigToken";
+import { withRouter } from "react-router-dom";
 
 const styles = {
   root: {
@@ -61,9 +63,20 @@ const styles = {
 };
 
 function Header(props) {
-  const { classes } = props;
+  const { classes, dispatch } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  // Sign Out user
+  const signOutUser = () => {
+    // Remove token from local storage
+    localStorage.removeItem("jwtToken");
+    // Remove token from axios header
+    axiosConfigToken(false);
+    // Set user to empty object
+    dispatch({ type: "signout" });
+    props.history.push("/sign/in");
+  };
 
   return (
     <div className={classes.root}>
@@ -80,7 +93,9 @@ function Header(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             BiblioStack
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={signOutUser}>
+            Sign Out
+          </Button>
         </Toolbar>
         <Collapse in={!isCollapsed}>
           {/* <Paper elevation={4} className={classes.paper}>
@@ -112,4 +127,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(withRouter(Header));
