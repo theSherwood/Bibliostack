@@ -9,22 +9,29 @@ const UserSchema = new Schema({
   githubId: {
     type: String
   },
-  handle: {
-    type: String
-  },
   email: {
     type: String
   },
   password: {
     type: String
   },
-  image: {
-    type: String
-  },
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  booklist: [
+    {
+      title: {
+        type: String
+      },
+      author: {
+        type: String
+      },
+      budget: {
+        type: String
+      }
+    }
+  ]
 });
 
 // Create collection and add schema
