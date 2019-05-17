@@ -14,11 +14,15 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import styles from "./AuthStyles";
-import { handleJWT, signInUser, signOutUser, signUpUser } from "./AuthActions";
+import { signInUser, signUpUser } from "./AuthActions";
 
 function Auth(props) {
   const isSignIn = props.match.params.type === "in";
-  const { classes, dispatch, history } = props;
+  const { classes, dispatch, history, isAuthenticated } = props;
+  console.log("auth", isAuthenticated);
+  if (isAuthenticated) {
+    history.push("/booklist");
+  }
   const [errors, setErrors] = useState({
     email: null,
     password: null,

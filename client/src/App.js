@@ -8,7 +8,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./components/home/Home";
 import HandleJWT from "./components/auth/HandleJWT";
-// import PrivateRoute from "./components/routing/PrivateRoute";
+import ProtectedRoute from "./components/routing/ProtectedRoute";
 import NotFound from "./components/routing/NotFound";
 import Booklist from "./components/books/Booklist";
 
@@ -42,6 +42,7 @@ if (token) {
   axiosConfigToken(token);
   const decodedUser = jwt_decode(token);
   initialState.user = decodedUser;
+  initialState.isAuthenticated = true;
 }
 
 function reducer(state, action) {
@@ -74,15 +75,19 @@ function App(props) {
       <CssBaseline />
       <Router>
         <div className={"App " + classes.app}>
-          <Header />
+          <Header dispatch={dispatch} />
           <div>
             <Switch>
               {/* <Route exact path="/" component={Home} /> */}
-              <Route
+              <ProtectedRoute
                 exact
                 path="/sign/:type"
-                render={() => <Auth dispatch={dispatch} />}
+                accessType="guest"
+                dispatch={dispatch}
+                isAuthenticated={state.isAuthenticated}
+                component={Auth}
               />
+              } />
               <Route
                 exact
                 path="/jwt/:token"
