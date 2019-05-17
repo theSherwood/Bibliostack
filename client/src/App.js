@@ -32,8 +32,7 @@ const styles = {
 
 const initialState = {
   isAuthenticated: false,
-  user: null,
-  booklist: null
+  user: null
 };
 
 // Get auth token
@@ -51,11 +50,9 @@ function reducer(state, action) {
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
-        booklist: null
+        user: null
       };
     case "signin":
-      console.log("dispatch successful");
       return {
         ...state,
         isAuthenticated: true,
@@ -96,7 +93,7 @@ function App(props) {
               <Route
                 exact
                 path="/booklist"
-                render={() => <Booklist {...state} />}
+                render={props => <Booklist {...state} {...props} />}
               />
               <Route path="/" component={NotFound} />
             </Switch>

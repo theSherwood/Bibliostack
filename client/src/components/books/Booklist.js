@@ -8,7 +8,7 @@ import axios from "axios";
 import uuid from "../../helpers/quickUUID";
 
 const Booklist = props => {
-  const { classes, dispatch } = props;
+  const { classes } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
   const [booklist, setBooklist] = useState([]);
@@ -25,7 +25,6 @@ const Booklist = props => {
   }, []);
 
   const updateBooklist = (book, index) => {
-    console.log("book", book);
     const newBooklist = [...booklist];
     newBooklist[index] = book;
     setBooklist(newBooklist);
