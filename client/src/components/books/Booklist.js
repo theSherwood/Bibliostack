@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getBooks } from "../../actions/bookActions";
-import { connect } from "react-redux";
-import compose from "recompose/compose";
 import Book from "./Book";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -71,6 +68,17 @@ const Booklist = props => {
   const { classes } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
+  const [booklist, setBooklist] = useState(mockDB);
+
+  useEffect(() => {
+    console.log(booklist);
+  }, [booklist]);
+
+  const updateBooklist = (book, index) => {
+    const newBooklist = [...booklist];
+    newBooklist[index] = book;
+    setBooklist(newBooklist);
+  };
 
   return (
     <main className={classes.main}>
@@ -84,12 +92,14 @@ const Booklist = props => {
           Fetch Results
         </Button>
         <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
-        {mockDB.map((book, i) => (
+        {booklist.map((book, i) => (
           <Book
             key={i}
+            index={i}
             fetchResults={fetchResults}
             expand={expand}
             book={book}
+            updateBooklist={updateBooklist}
           />
         ))}
       </Paper>
@@ -97,10 +107,4 @@ const Booklist = props => {
   );
 };
 
-export default compose(
-  withStyles(styles),
-  connect(
-    null,
-    { getBooks }
-  )
-)(Booklist);
+export default withStyles(styles)(Booklist);
