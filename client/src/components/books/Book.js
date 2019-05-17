@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
+import Link from "@material-ui/core/Link";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
@@ -89,11 +89,23 @@ const styles = theme => ({
   },
   textField: {
     width: "100%"
+  },
+  ul: {
+    padding: 0,
+    width: "100%",
+    marginBottom: 0
+  },
+  li: {
+    listStyleType: "none"
+  },
+  actions: {
+    paddingTop: 10,
+    paddingBottom: 10
   }
 });
 
 const Book = props => {
-  const { fetchResults, classes, expand, book } = props;
+  const { fetchResults, classes, expand, book, updateBooklist, index } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const { ebayBookResult, fetching, error } = state;
   const [expanded, setExpanded] = useState(false);
@@ -137,19 +149,34 @@ const Book = props => {
   if (ebayBookResult) {
     resultsContent =
       ebayBookResult.length > 0 ? (
-        <ul>
-          {ebayBookResult.map(book => {
-            const currentPrice = book.sellingStatus[0].currentPrice[0];
-            const currency = currentPrice["@currencyId"];
-            const value = currentPrice["__value__"];
-            return (
-              <li key={book.itemId[0]}>
-                {currency} {value + " : "}
-                <Typography noWrap={true}>{book.title[0]}</Typography>
-              </li>
-            );
-          })}
-        </ul>
+        <Grid container wrap="nowrap" spacing={0}>
+          <ul className={classes.ul}>
+            {ebayBookResult.map(book => {
+              const currentPrice = book.sellingStatus[0].currentPrice[0];
+              const currency = currentPrice["@currencyId"];
+              const value = currentPrice["__value__"];
+              const url = book.viewItemURL[0];
+              return (
+                <li key={book.itemId[0]} className={classes.li}>
+                  <Grid container wrap="nowrap" spacing={0}>
+                    <Grid item xs zeroMinWidth>
+                      {currency} {value + " : "}
+                      <Typography noWrap={true}>
+                        <Link
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {book.title[0]}
+                        </Link>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </li>
+              );
+            })}
+          </ul>
+        </Grid>
       ) : (
         <p>No results found</p>
       );
@@ -170,6 +197,9 @@ const Book = props => {
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   className={classes.textField}
+                  onBlur={() =>
+                    updateBooklist({ title, author, budget }, index)
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -177,6 +207,9 @@ const Book = props => {
                   value={author}
                   onChange={e => setAuthor(e.target.value)}
                   className={classes.textField}
+                  onBlur={() =>
+                    updateBooklist({ title, author, budget }, index)
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -184,6 +217,9 @@ const Book = props => {
                   value={budget}
                   onChange={e => setBudget(e.target.value)}
                   className={classes.textField}
+                  onBlur={() =>
+                    updateBooklist({ title, author, budget }, index)
+                  }
                 />
               </Grid>
             </Grid>
@@ -196,14 +232,10 @@ const Book = props => {
             {resultsContent}
           </ExpansionPanelDetails>
         ) : null}
-        {/* <Divider /> */}
-        <ExpansionPanelActions>
+        <ExpansionPanelActions className={classes.actions}>
           <Button size="small" onClick={() => fetchBooks()}>
             Fetch Results
           </Button>
-          {/* <Button size="small" color="primary">
-            Save
-          </Button> */}
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
