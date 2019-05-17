@@ -89,15 +89,15 @@ function Header(props) {
           <ul>
             <li>
               <Typography color="inherit">
-                <Link component={RouterLink} to="/auth" color="inherit">
-                  Sign In
+                <Link component={RouterLink} to="/sign/up" color="inherit">
+                  Sign Up
                 </Link>
               </Typography>
             </li>
             <li>
               <Typography color="inherit">
-                <Link component={RouterLink} to="/auth" color="inherit">
-                  Sign Up
+                <Link component={RouterLink} to="/sign/in" color="inherit">
+                  Sign In
                 </Link>
               </Typography>
             </li>

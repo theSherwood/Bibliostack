@@ -2,20 +2,19 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
 
 // Load Validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
+const validateSignUpInput = require("../../validation/signup");
+const validateSignInInput = require("../../validation/signin");
 
 // Load User Model
 const User = require("../../models/User");
 
-// @route     POST /api/auth/login
-// @desc      Login for email and password
+// @route     POST /api/auth/signin
+// @desc      Sign in for email and password
 // @access    Public
-router.post("/login", (req, res) => {
-  const { errors, isValid } = validateLoginInput(req.body);
+router.post("/signin", (req, res) => {
+  const { errors, isValid } = validateSignInInput(req.body);
 
   // Check String Validation
   if (!isValid) {
@@ -60,11 +59,11 @@ router.post("/login", (req, res) => {
   });
 });
 
-// @route     POST /api/auth/register
-// @desc      Register with email and password
+// @route     POST /api/auth/signup
+// @desc      Sign up with email and password
 // @access    Public
-router.post("/register", (req, res) => {
-  const { errors, isValid } = validateRegisterInput(req.body);
+router.post("/signup", (req, res) => {
+  const { errors, isValid } = validateSignUpInput(req.body);
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
@@ -95,17 +94,5 @@ router.post("/register", (req, res) => {
     }
   });
 });
-
-// @route     GET /api/auth/current
-// @desc      Return current user
-// @access    Private
-router.get(
-  "/current",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const { id, handle, email } = req.user;
-    res.json({ id, handle, email });
-  }
-);
 
 module.exports = router;
