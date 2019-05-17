@@ -4,32 +4,25 @@ import axiosConfigToken from "../../helpers/axiosConfigToken";
 
 // Handle token and set user
 export const handleJWT = (token, history, dispatch) => {
-  let success = true;
-  try {
-    // Add 'Bearer' to tokens from Oauth process
-    if (!token.startsWith("Bearer ")) {
-      token = "Bearer " + token;
-    }
-    // Decode token for user data
-    const decodedUser = jwt_decode(token);
-    localStorage.setItem("jwtToken", token);
-    // Configure axios Authorization header
-    axiosConfigToken(token);
-    // Set user
-    dispatch({
-      type: "login",
-      payload: decodedUser
-    });
-  } catch (err) {
-    success = false;
-    console.log(err);
-    // dispatch({
-    //   type: GET_AUTH_ERRORS,
-    //   payload: err.message
-    // });
+  // let success = true;
+
+  // Add 'Bearer' to tokens from Oauth process
+  if (!token.startsWith("Bearer ")) {
+    token = "Bearer " + token;
   }
+  // Decode token for user data
+  const decodedUser = jwt_decode(token);
+  localStorage.setItem("jwtToken", token);
+  // Configure axios Authorization header
+  axiosConfigToken(token);
+  // Set user
+  dispatch({
+    type: "signin",
+    payload: decodedUser
+  });
+
   // Redirect to challenges
-  if (success) history.push("/booklist");
+  // if (success) history.push("/booklist");
 };
 
 // props.handleJWT(props.match.params.token, props.history);
@@ -42,20 +35,14 @@ export const handleJWT = (token, history, dispatch) => {
 
 // Sign In User
 export const signInUser = (formData, history, dispatch) => {
-  axios
+  return axios
     .post("/api/auth/signin", formData)
     .then(res => {
       // Save to local storage
       const { token } = res.data;
-      dispatch(handleJWT(token, history));
+      dispatch(handleJWT(token, history, dispatch));
     })
-    .catch(err => {
-      console.log(err);
-      // dispatch({
-      //   type: GET_AUTH_ERRORS,
-      //   payload: err.response.data
-      // });
-    });
+    .catch(err => err);
 };
 
 // Sign Out user
@@ -70,14 +57,8 @@ export const signOutUser = dispatch => {
 
 // Sign Up user
 export const signUpUser = (formData, history, dispatch) => {
-  axios
+  return axios
     .post("/api/auth/signup", formData)
     .then(res => history.push("/booklist"))
-    .catch(
-      err => console.log(err)
-      // dispatch({
-      //   type: GET_AUTH_ERRORS,
-      //   payload: err.response.data
-      // })
-    );
+    .catch(err => err);
 };

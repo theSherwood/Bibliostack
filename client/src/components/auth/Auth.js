@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
@@ -17,10 +17,9 @@ import styles from "./AuthStyles";
 import { handleJWT, signInUser, signOutUser, signUpUser } from "./AuthActions";
 
 function Auth(props) {
-  console.log(props);
+  const isSignIn = props.match.params.type === "in";
   const { classes, dispatch, history } = props;
-  const [isSignIn, setSignIn] = useState(false);
-  const [formErrors, setFormErrors] = useState({
+  const [errors, setErrors] = useState({
     email: null,
     password: null,
     confirmPassword: null
@@ -31,9 +30,32 @@ function Auth(props) {
     confirmPassword: ""
   });
 
-  const handleSubmit = e => {
+  useEffect(() => {
+    setErrors({
+      email: null,
+      password: null,
+      confirmPassword: null
+    });
+    return () => {
+      setErrors({
+        email: null,
+        password: null,
+        confirmPassword: null
+      });
+    };
+  }, [isSignIn]);
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    dispatch({ type: "login", payload: "psych!" });
+    let err;
+    if (isSignIn) {
+      err = await signInUser(formData, history, dispatch);
+    } else {
+      err = await signUpUser(formData, history, dispatch);
+    }
+    if (err) {
+      setErrors(err.response.data);
+    }
   };
 
   const handleInput = e => {
@@ -41,6 +63,7 @@ function Auth(props) {
   };
 
   const { email, password, confirmPassword } = formData;
+
   return (
     <main className={classes.main}>
       <CssBaseline />
@@ -57,11 +80,15 @@ function Auth(props) {
             <Input
               id="email"
               name="email"
-              autoComplete="false"
+              autoComplete={isSignIn ? "on" : "off"}
               autoFocus
               value={email}
               onChange={handleInput}
+              error={!!errors.email}
             />
+            {errors.email ? (
+              <Typography color="error">{errors.email}</Typography>
+            ) : null}
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -69,10 +96,14 @@ function Auth(props) {
               name="password"
               type="password"
               id="password"
-              autoComplete="false"
+              autoComplete={isSignIn ? "on" : "off"}
               value={password}
               onChange={handleInput}
+              error={!!errors.password}
             />
+            {errors.password ? (
+              <Typography color="error">{errors.password}</Typography>
+            ) : null}
           </FormControl>
           {isSignIn ? null : (
             <FormControl margin="normal" required fullWidth>
@@ -81,10 +112,14 @@ function Auth(props) {
                 name="confirmPassword"
                 type="password"
                 id="confirmPassword"
-                autoComplete="false"
+                autoComplete={isSignIn ? "on" : "off"}
                 value={confirmPassword}
                 onChange={handleInput}
+                error={!!errors.confirmPassword}
               />
+              {errors.confirmPassword ? (
+                <Typography color="error">{errors.confirmPassword}</Typography>
+              ) : null}
             </FormControl>
           )}
           <Button
