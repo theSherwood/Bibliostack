@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -23,6 +24,10 @@ const styles = theme => ({
       width: 400,
       marginLeft: "auto",
       marginRight: "auto"
+    },
+    [theme.breakpoints.down(400)]: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit
     }
   },
   paper: {
@@ -31,7 +36,10 @@ const styles = theme => ({
     flexDirection: "column",
     alignItems: "center",
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-      .spacing.unit * 3}px`
+      .spacing.unit * 3}px`,
+    [theme.breakpoints.down(400)]: {
+      marginTop: theme.spacing.unit
+    }
   },
   avatar: {
     margin: theme.spacing.unit,
@@ -46,9 +54,25 @@ const styles = theme => ({
   }
 });
 
-function SignIn(props) {
-  const { classes } = props;
+function SignUp(props) {
+  const { classes, dispatch } = props;
+  const [isSignIn, setSignIn] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    dispatch({ type: "login", payload: "psych!" });
+  };
+
+  const handleInput = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { email, password, confirmPassword } = formData;
   return (
     <main className={classes.main}>
       <CssBaseline />
@@ -57,12 +81,19 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          {isSignIn ? "Sign In" : "Sign Up"}
         </Typography>
-        <form className={classes.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
+            <Input
+              id="email"
+              name="email"
+              autoComplete="false"
+              autoFocus
+              value={email}
+              onChange={handleInput}
+            />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -70,13 +101,24 @@ function SignIn(props) {
               name="password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              autoComplete="false"
+              value={password}
+              onChange={handleInput}
             />
           </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          {isSignIn ? null : (
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Confirm Password</InputLabel>
+              <Input
+                name="confirmPassword"
+                type="password"
+                id="confirmPassword"
+                autoComplete="false"
+                value={confirmPassword}
+                onChange={handleInput}
+              />
+            </FormControl>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -84,7 +126,7 @@ function SignIn(props) {
             color="primary"
             className={classes.submit}
           >
-            Sign in
+            {isSignIn ? "Sign In" : "Sign Up"}
           </Button>
         </form>
       </Paper>
@@ -92,8 +134,8 @@ function SignIn(props) {
   );
 }
 
-SignIn.propTypes = {
+SignUp.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(withRouter(SignUp));
