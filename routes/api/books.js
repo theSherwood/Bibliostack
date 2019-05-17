@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const fetch = require("node-fetch");
+const mongoose = require("mongoose");
+
+// Load User Schema
+const User = mongoose.model("users");
 
 // Create a JavaScript array of the item filters you want to use in your request
 function constructFilterArray(maxPrice, currency) {
@@ -76,9 +80,9 @@ router.post(
     let { title, author, budget } = req.body;
     title = title.trim();
     author = author.trim();
-    budget = budget.trim() || "100000";
+    budget = budget.trim();
+    budget = !isNaN(parseFloat(budget)) && isFinite(budget) ? budget : "100000";
     let searchTerm = title + " " + author;
-    console.log(title, author, budget);
     if (!searchTerm.trim()) {
       return res.send([]);
     }
@@ -99,6 +103,37 @@ router.post(
           parsedResponse.findItemsByKeywordsResponse[0].searchResult[0].item;
         return res.json(results);
       });
+  }
+);
+
+// @route     POST /api/books/booklist
+// @desc      Save books to database
+// @access    Private
+router.post(
+  "/booklist",
+  // passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .then(user => {
+        user.booklist = req.body.booklist;
+        user.save().then(() => res.json({ succes: "true" }));
+      })
+      .catch(err => res.send(err));
+  }
+);
+
+// @route     GET /api/books/booklist
+// @desc      Get books from database
+// @access    Private
+router.get(
+  "/booklist",
+  // passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .then(user => {
+        res.json(user.booklist);
+      })
+      .catch(err => res.send(err));
   }
 );
 
