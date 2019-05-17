@@ -7,6 +7,7 @@ import Auth from "./components/auth/Auth";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./components/home/Home";
+import HandleJWT from "./components/auth/HandleJWT";
 // import PrivateRoute from "./components/routing/PrivateRoute";
 import NotFound from "./components/routing/NotFound";
 import Booklist from "./components/books/Booklist";
@@ -79,8 +80,13 @@ function App(props) {
               {/* <Route exact path="/" component={Home} /> */}
               <Route
                 exact
-                path="/sign/:token"
+                path="/sign/:type"
                 render={() => <Auth dispatch={dispatch} />}
+              />
+              <Route
+                exact
+                path="/jwt/:token"
+                render={() => <HandleJWT dispatch={dispatch} />}
               />
               <Route
                 exact

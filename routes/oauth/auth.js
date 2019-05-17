@@ -27,7 +27,7 @@ router.get(
       process.env.JWT_SECRET,
       { expiresIn: 36000 },
       (err, token) => {
-        res.redirect("/sign/" + token);
+        res.redirect("/jwt/" + token);
       }
     );
   }
@@ -55,7 +55,7 @@ router.get(
       process.env.JWT_SECRET,
       { expiresIn: 36000 },
       (err, token) => {
-        res.redirect("/sign/" + token);
+        res.redirect("/jwt/" + token);
       }
     );
   }

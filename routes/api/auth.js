@@ -63,6 +63,7 @@ router.post("/signin", (req, res) => {
 // @desc      Sign up with email and password
 // @access    Public
 router.post("/signup", (req, res) => {
+  console.log(req.body);
   const { errors, isValid } = validateSignUpInput(req.body);
 
   User.findOne({ email: req.body.email }).then(user => {
@@ -72,11 +73,11 @@ router.post("/signup", (req, res) => {
     } else {
       // Check String Validation
       if (!isValid) {
+        console.log("bad");
         return res.status(400).json(errors);
       }
 
       const newUser = new User({
-        handle: req.body.handle,
         email: req.body.email,
         password: req.body.password
       });
