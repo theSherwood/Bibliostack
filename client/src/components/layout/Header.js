@@ -43,7 +43,9 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Collapse from "@material-ui/core/Collapse";
+import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
+import { Link as RouterLink } from "react-router-dom";
 
 const styles = {
   root: {
@@ -85,10 +87,20 @@ function Header(props) {
             
           </Paper> */}
           <ul>
-            <li>words words</li>
-            <li>words words</li>
-            <li>words words</li>
-            <li>words words</li>
+            <li>
+              <Typography color="inherit">
+                <Link component={RouterLink} to="/auth" color="inherit">
+                  Sign In
+                </Link>
+              </Typography>
+            </li>
+            <li>
+              <Typography color="inherit">
+                <Link component={RouterLink} to="/auth" color="inherit">
+                  Sign Up
+                </Link>
+              </Typography>
+            </li>
           </ul>
         </Collapse>
       </AppBar>
