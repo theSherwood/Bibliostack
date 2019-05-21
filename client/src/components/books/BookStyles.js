@@ -83,5 +83,8 @@ export default theme => ({
   placeCenter: {
     display: "grid",
     placeItems: "center"
+  },
+  less: {
+    transform: "rotate(180deg)"
   }
 });

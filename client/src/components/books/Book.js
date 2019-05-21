@@ -39,7 +39,15 @@ function reducer(state, action) {
 }
 
 const Book = props => {
-  const { fetchResults, classes, expand, book, updateBooklist, index } = props;
+  const {
+    fetchResults,
+    classes,
+    expand,
+    book,
+    updateBooklist,
+    deleteBook,
+    index
+  } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const { ebayBookResult, fetching, error } = state;
   const [expanded, setExpanded] = useState(false);
@@ -74,7 +82,12 @@ const Book = props => {
   };
 
   const handlePanelClick = e => {
-    if (!e.target.matches("input")) {
+    if (
+      !(
+        e.target.matches("input") ||
+        e.target.matches(".deleteButton, .deleteButton *")
+      )
+    ) {
       setExpanded(!expanded);
     }
   };
@@ -122,7 +135,6 @@ const Book = props => {
         <ExpansionPanelSummary
           className={classes.summary}
           onClick={handlePanelClick}
-          // expandIcon={<ExpandMoreIcon />}
         >
           <div className={classes.grow}>
             <Grid container spacing={8}>
@@ -169,13 +181,16 @@ const Book = props => {
             </Grid>
             <Grid container className={classes.buttonContainer}>
               <div className={classes.placeCenter}>
-                <IconButton>
-                  <CloseIcon />
+                <IconButton
+                  className="deleteButton"
+                  onClick={() => deleteBook(book._id)}
+                >
+                  <CloseIcon className="deleteButton" />
                 </IconButton>
               </div>
               <div className={classes.placeCenter}>
                 <IconButton>
-                  <ExpandMoreIcon />
+                  <ExpandMoreIcon className={expanded ? classes.less : null} />
                 </IconButton>
               </div>
             </Grid>
