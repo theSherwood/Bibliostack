@@ -30,6 +30,11 @@ const Booklist = props => {
     setBooklist(newBooklist);
   };
 
+  const deleteBook = id => {
+    const newBooklist = booklist.filter(book => book._id !== id);
+    setBooklist(newBooklist);
+  };
+
   const postBooklist = booklist => {
     let filteredBooklist;
     if (booklist) {
@@ -99,6 +104,7 @@ const Booklist = props => {
                 expand={expand}
                 book={book}
                 updateBooklist={updateBooklist}
+                deleteBook={deleteBook}
               />
             ))
           : null}
