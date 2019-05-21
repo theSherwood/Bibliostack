@@ -7,7 +7,7 @@ export default theme => ({
       "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
     [theme.breakpoints.down(600)]: {
       paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 4
+      paddingRight: theme.spacing.unit * 2
     }
   },
   heading: {
@@ -48,7 +48,13 @@ export default theme => ({
     }
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    "&&": {
+      paddingRight: 0
+    }
   },
   textField: {
     width: "100%"
@@ -64,5 +70,18 @@ export default theme => ({
   actions: {
     paddingTop: 10,
     paddingBottom: 10
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    flex: "0 1 0",
+    [theme.breakpoints.down(600)]: {
+      flexWrap: "wrap"
+    },
+    marginLeft: theme.spacing.unit
+  },
+  placeCenter: {
+    display: "grid",
+    placeItems: "center"
   }
 });

@@ -6,6 +6,8 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import CloseIcon from "@material-ui/icons/Close";
+import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
@@ -116,11 +118,11 @@ const Book = props => {
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel expanded={expanded}>
+      <ExpansionPanel expanded={expanded} square>
         <ExpansionPanelSummary
           className={classes.summary}
           onClick={handlePanelClick}
-          expandIcon={<ExpandMoreIcon />}
+          // expandIcon={<ExpandMoreIcon />}
         >
           <div className={classes.grow}>
             <Grid container spacing={8}>
@@ -151,7 +153,7 @@ const Book = props => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={2}>
                 <TextField
                   value={budget}
                   onChange={e => setBudget(e.target.value)}
@@ -164,6 +166,18 @@ const Book = props => {
                   }
                 />
               </Grid>
+            </Grid>
+            <Grid container className={classes.buttonContainer}>
+              <div className={classes.placeCenter}>
+                <IconButton>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <div className={classes.placeCenter}>
+                <IconButton>
+                  <ExpandMoreIcon />
+                </IconButton>
+              </div>
             </Grid>
           </div>
         </ExpansionPanelSummary>
