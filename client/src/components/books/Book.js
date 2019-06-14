@@ -16,7 +16,8 @@ import axios from "axios";
 import styles from "./BookStyles.js";
 
 const $symbols = {
-  USD: "$"
+  USD: "$",
+  GBP: "£"
 };
 
 const initialState = {
@@ -59,6 +60,7 @@ const Book = props => {
   const [title, setTitle] = useState(book.title || "");
   const [author, setAuthor] = useState(book.author || "");
   const [budget, setBudget] = useState(book.budget || "");
+  const [results, setResults] = useState(book.results || "");
 
   useEffect(() => {
     setExpanded(expand);
@@ -75,7 +77,8 @@ const Book = props => {
     const body = {
       title,
       author,
-      budget
+      budget,
+      results
     };
     axios
       .post("/api/books/book", body)
@@ -105,15 +108,16 @@ const Book = props => {
           <ul className={classes.ul}>
             {ebayBookResult.map(book => {
               const currentPrice = book.sellingStatus[0].currentPrice[0];
-              const currency = $symbols[currentPrice["@currencyId"]];
+              const currency =
+                $symbols[currentPrice["@currencyId"]] ||
+                currentPrice["@currencyId"];
               const value = currentPrice["__value__"];
               const url = book.viewItemURL[0];
               return (
                 <li key={book.itemId[0]} className={classes.li}>
                   <Grid container wrap="nowrap" spacing={0}>
                     <Grid item xs zeroMinWidth>
-                      {currency}
-                      {value + " : "}
+                      {currency} {value + " : "}
                       <Typography noWrap={true}>
                         <Link
                           href={url}
@@ -153,7 +157,7 @@ const Book = props => {
                   autoFocus
                   onBlur={() =>
                     updateBookstack(
-                      { title, author, budget, _id: book._id },
+                      { title, author, budget, results, _id: book._id },
                       index
                     )
                   }
@@ -167,7 +171,7 @@ const Book = props => {
                   label={labels ? "author" : null}
                   onBlur={() =>
                     updateBookstack(
-                      { title, author, budget, _id: book._id },
+                      { title, author, budget, results, _id: book._id },
                       index
                     )
                   }
@@ -181,7 +185,21 @@ const Book = props => {
                   label={labels ? "budget" : null}
                   onBlur={() =>
                     updateBookstack(
-                      { title, author, budget, _id: book._id },
+                      { title, author, budget, results, _id: book._id },
+                      index
+                    )
+                  }
+                />
+              </Grid>
+              <Grid item xs={6} sm={2}>
+                <TextField
+                  value={results}
+                  onChange={e => setResults(e.target.value)}
+                  className={classes.textField}
+                  label={labels ? "results" : null}
+                  onBlur={() =>
+                    updateBookstack(
+                      { title, author, budget, results, _id: book._id },
                       index
                     )
                   }
@@ -208,8 +226,7 @@ const Book = props => {
         {fetching || error || resultsContent ? (
           <ExpansionPanelDetails className={classes.details}>
             {fetching ? <p>Fetching results...</p> : null}
-            {error ? error.message : null}
-            {resultsContent}
+            {error ? error.message : resultsContent}
           </ExpansionPanelDetails>
         ) : null}
         <ExpansionPanelActions className={classes.actions}>
