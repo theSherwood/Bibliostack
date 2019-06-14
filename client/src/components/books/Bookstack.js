@@ -10,21 +10,20 @@ import axios from "axios";
 import uuid from "../../helpers/quickUUID";
 import "./Bookstack.css";
 
+const getCountryCode = () => {
+  return localStorage.getItem("countryCode") || "EBAY-US";
+};
+
 const Bookstack = props => {
   const { classes, isAuthenticated } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
   const [bookstack, setBookstack] = useState([]);
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState(getCountryCode());
 
   useEffect(() => {
-    getCountryCode();
     getBookstack();
   }, []);
-
-  const getCountryCode = () => {
-    setCountryCode(localStorage.getItem("countryCode") || "EBAY-US");
-  };
 
   const updateCountryCode = code => {
     localStorage.setItem("countryCode", code);
@@ -153,6 +152,7 @@ const Bookstack = props => {
                   book={book}
                   updateBookstack={updateBookstack}
                   deleteBook={deleteBook}
+                  countryCode={countryCode}
                 />
               </CSSTransition>
             ))}
