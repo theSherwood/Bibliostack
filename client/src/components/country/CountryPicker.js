@@ -9,7 +9,17 @@ const styles = theme => ({
   invsblebtn: {
     outline: "none",
     background: "transparent",
-    border: "none"
+    border: "none",
+    borderRadius: "100%",
+    boxShadow: "0 0 15px 5px rgba(0, 0, 0, 0.25)",
+    padding: 0,
+    width: "min-content",
+    margin: "0px 10px",
+    transform: "scale(1.5, 1.5)"
+  },
+  countrypicker: {
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2
   }
 });
 
@@ -27,13 +37,17 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
 
   const CountryIcon = getIcon(countryCode);
 
-  const handleClick = e => {
+  const handleClick = code => {
+    if (showIcons) updateCountryCode(code);
     setShowIcons(!showIcons);
   };
 
   return (
-    <div>
-      <button className={classes.invsblebtn} onClick={handleClick}>
+    <div className={classes.countrypicker}>
+      <button
+        className={classes.invsblebtn}
+        onClick={() => handleClick(countryCode)}
+      >
         <CountryIcon size="24" />
       </button>
 
@@ -41,7 +55,10 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
         ? Object.entries(countries)
             .filter(([code, Icon]) => code !== countryCode)
             .map(([code, Icon]) => (
-              <button className={classes.invsblebtn} onClick={handleClick}>
+              <button
+                className={classes.invsblebtn}
+                onClick={() => handleClick(code)}
+              >
                 <Icon size="24" />
               </button>
             ))
