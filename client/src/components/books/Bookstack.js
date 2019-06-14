@@ -82,7 +82,8 @@ const Bookstack = props => {
     const mappedBookstack = bookstack.map(book => ({
       title: book.title,
       author: book.author,
-      budget: book.budget
+      budget: book.budget,
+      results: book.results
     }));
     axios
       .post("api/books/bookstack", { bookstack: mappedBookstack })

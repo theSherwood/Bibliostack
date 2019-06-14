@@ -29,6 +29,9 @@ const UserSchema = new Schema({
       },
       budget: {
         type: String
+      },
+      results: {
+        type: String
       }
     }
   ]
