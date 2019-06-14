@@ -1,50 +1,11 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-// import PropTypes from "prop-types";
-// import { connect } from "react-redux";
-// import { logoutUser } from "../../actions/authActions";
-
-// function Header(props) {
-//   const { auth } = props;
-
-//   const onLogoutClick = e => {
-//     props.logoutUser();
-//   };
-//   return (
-//     <header style={{ background: "steelblue" }}>
-//       <div>
-//         <h4 style={{ display: "inline-block" }}>Header</h4>
-//       </div>
-//     </header>
-//   );
-// }
-
-// Header.propTypes = {
-//   auth: PropTypes.object.isRequired,
-//   logoutUser: PropTypes.func.isRequired
-// };
-
-// const mapStateToProps = state => ({
-//   auth: state.auth
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   { logoutUser }
-// )(Header);
-
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Collapse from "@material-ui/core/Collapse";
 import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
 import { Link as RouterLink } from "react-router-dom";
 import axiosConfigToken from "../../helpers/axiosConfigToken";
 import { withRouter } from "react-router-dom";
@@ -63,7 +24,7 @@ const styles = {
 };
 
 function Header(props) {
-  const { classes, dispatch } = props;
+  const { classes, dispatch, state } = props;
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -82,42 +43,45 @@ function Header(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="Menu"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            BiblioStack
+            <Link
+              component={RouterLink}
+              to="/"
+              color="inherit"
+              underline="none"
+            >
+              BiblioStack
+            </Link>
           </Typography>
-          <Button color="inherit" onClick={signOutUser}>
-            Sign Out
-          </Button>
-        </Toolbar>
-        <Collapse in={!isCollapsed}>
-          {/* <Paper elevation={4} className={classes.paper}>
-            
-          </Paper> */}
-          <ul>
-            <li>
-              <Typography color="inherit">
-                <Link component={RouterLink} to="/sign/up" color="inherit">
-                  Sign Up
-                </Link>
-              </Typography>
-            </li>
-            <li>
-              <Typography color="inherit">
-                <Link component={RouterLink} to="/sign/in" color="inherit">
+          {state.isAuthenticated ? (
+            <Button color="inherit" onClick={signOutUser}>
+              Sign Out
+            </Button>
+          ) : (
+            <Fragment>
+              <Button color="inherit" onClick={signOutUser}>
+                <Link
+                  component={RouterLink}
+                  to="/sign/in"
+                  color="inherit"
+                  underline="none"
+                >
                   Sign In
                 </Link>
-              </Typography>
-            </li>
-          </ul>
-        </Collapse>
+              </Button>
+              <Button color="inherit" onClick={signOutUser}>
+                <Link
+                  component={RouterLink}
+                  to="/sign/up"
+                  color="inherit"
+                  underline="none"
+                >
+                  Sign Up
+                </Link>
+              </Button>
+            </Fragment>
+          )}
+        </Toolbar>
       </AppBar>
     </div>
   );
