@@ -7,6 +7,17 @@ const mongoose = require("mongoose");
 // Load User Schema
 const User = mongoose.model("users");
 
+/*
+  Ebay Site IDs and Abrreviations
+  
+    Site Name         | Global ID      | Site ID
+    ----------------------------------------------
+    United States     | EBAY-US        |  0
+    Canada(english)   | EBAY-ENCA      |  2
+    United Kingdom    | EBAY-GB        |  3
+    Australia         | EBAY-AU        |  15
+*/
+
 // Create a JavaScript array of the item filters you want to use in your request
 function constructFilterArray(maxPrice, currency) {
   return [
@@ -26,79 +37,49 @@ function constructFilterArray(maxPrice, currency) {
   ];
 }
 
-// Generates an indexed URL snippet from the array of item filters
-function buildURLArray(filterarray) {
-  // Define global variable for the URL filter
-  let urlfilter = "";
-  // Iterate through each filter in the array
-  for (var i = 0; i < filterarray.length; i++) {
-    // Index each item filter in filterarray
-    var itemfilter = filterarray[i];
-    // Iterate through each parameter in each item filter
-    for (var index in itemfilter) {
-      // Check to see if the paramter has a value (some don't)
-      if (itemfilter[index] !== "") {
-        if (itemfilter[index] instanceof Array) {
-          for (var r = 0; r < itemfilter[index].length; r++) {
-            var value = itemfilter[index][r];
-            urlfilter +=
-              "&itemFilter(" + i + ")." + index + "(" + r + ")=" + value;
-          }
-        } else {
-          urlfilter +=
-            "&itemFilter(" + i + ")." + index + "=" + itemfilter[index];
-        }
-      }
-    }
-  }
-  return urlfilter;
-}
-
-// Construct the request
-function constructURL(urlfilter, searchTerm, siteLocationCode, numEntries) {
-  let url = "https://svcs.ebay.com/services/search/FindingService/v1";
-  url += "?OPERATION-NAME=findItemsByKeywords";
-  url += "&SERVICE-VERSION=1.0.0";
-  url += "&SECURITY-APPNAME=AdamSher-Booksear-PRD-38dd99240-7ddfbe7a";
-  url += `&GLOBAL-ID=EBAY-${siteLocationCode}`;
-  url += "&RESPONSE-DATA-FORMAT=JSON";
-  url += "&REST-PAYLOAD";
-  url += `&keywords=${searchTerm}`;
-  url += `&paginationInput.entriesPerPage=${numEntries}`;
-  url += urlfilter;
-
-  return url;
-}
-
 // @route     POST /api/books/book
 // @desc      Search for book on ebay
 // @access    Public
 router.post("/book", (req, res) => {
-  let { title, author, budget } = req.body;
+  let { title, author, budget, results } = req.body;
   title = title.trim();
   author = author.trim();
   budget = budget.trim();
+  results = results.trim();
   budget = !isNaN(parseFloat(budget)) && isFinite(budget) ? budget : "100000";
+  results = !isNaN(parseInt(results)) && isFinite(budget) ? results : "3";
   let searchTerm = title + " " + author;
   if (!searchTerm.trim()) {
     return res.send([]);
   }
-  searchTerm = encodeURIComponent(title + " " + author);
 
   const filterarray = constructFilterArray(budget, "USD");
-  const urlfilter = buildURLArray(filterarray);
-  const url = constructURL(urlfilter, searchTerm, "US", "3");
 
-  fetch(url)
-    .then(ebayResponse => {
-      return ebayResponse.text();
+  fetch("https://svcs.ebay.com/services/search/FindingService/v1", {
+    method: "POST",
+    headers: {
+      "X-EBAY-SOA-OPERATION-NAME": "findItemsAdvanced",
+      "X-EBAY-SOA-SECURITY-APPNAME": process.env.EBAY_ID,
+      "X-EBAY-SOA-REQUEST-DATA-FORMAT": "JSON",
+      "X-EBAY-SOA-GLOBAL-ID": "EBAY-GB"
+    },
+    body: JSON.stringify({
+      findItemsAdvancedRequest: {
+        categoryId: "267",
+        paginationInput: { entriesPerPage: results },
+        itemFilter: [{ name: "MaxPrice", value: budget }],
+        keywords: title + " " + author
+      }
     })
-    .then(text => {
-      const parsedResponse = JSON.parse(text);
-      const results =
-        parsedResponse.findItemsByKeywordsResponse[0].searchResult[0].item;
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      const results = data.findItemsAdvancedResponse[0].searchResult[0].item;
+      console.log(results);
       return res.json(results);
-    });
+    })
+    .catch(err => console.log(err));
 });
 
 // @route     POST /api/books/bookstack
