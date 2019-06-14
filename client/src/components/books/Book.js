@@ -29,7 +29,7 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "fetching":
-      return { ...state, fetching: true, ebayBookResult: null };
+      return { ...state, fetching: true, ebayBookResult: null, error: null };
     case "setEbayBookResult":
       return { ...state, fetching: false, ebayBookResult: action.payload };
     case "clearResult":
@@ -52,7 +52,8 @@ const Book = props => {
     updateBookstack,
     deleteBook,
     index,
-    labels
+    labels,
+    countryCode
   } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const { ebayBookResult, fetching, error } = state;
@@ -78,7 +79,8 @@ const Book = props => {
       title,
       author,
       budget,
-      results
+      results,
+      country: countryCode
     };
     axios
       .post("/api/books/book", body)
