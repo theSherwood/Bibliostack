@@ -22,12 +22,8 @@ const Bookstack = props => {
   }, []);
 
   const getBookstack = () => {
-    if (isAuthenticated) {
-      getBookstackServer();
-    }
-    getBookstackLocal();
+    isAuthenticated ? getBookstackServer() : getBookstackLocal();
   };
-
   const getBookstackServer = () => {
     axios
       .get("api/books/bookstack")
@@ -39,7 +35,6 @@ const Bookstack = props => {
         console.log(err);
       });
   };
-
   const getBookstackLocal = () => {
     const bookstackStr = localStorage.getItem("bookstack");
     if (bookstackStr) {
@@ -60,7 +55,7 @@ const Bookstack = props => {
     setBookstack(newBookstack);
   };
 
-  const postBookstack = bookstack => {
+  const storeBookstack = bookstack => {
     let filteredBookstack;
     if (bookstack) {
       filteredBookstack = bookstack.filter(book => {
@@ -77,8 +72,15 @@ const Bookstack = props => {
       filteredBookstack = [];
     }
     setBookstack(filteredBookstack);
+
+    isAuthenticated
+      ? storeBookstackServer(filteredBookstack)
+      : storeBookstackLocal(filteredBookstack);
+  };
+
+  const storeBookstackServer = bookstack => {
     // remove the _ids before it goes to the database
-    const mappedBookstack = filteredBookstack.map(book => ({
+    const mappedBookstack = bookstack.map(book => ({
       title: book.title,
       author: book.author,
       budget: book.budget
@@ -89,6 +91,10 @@ const Bookstack = props => {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const storeBookstackLocal = bookstack => {
+    localStorage.setItem("bookstack", JSON.stringify(bookstack));
   };
 
   const handleAddBook = () => {
@@ -102,7 +108,7 @@ const Bookstack = props => {
   const fetchAll = () => {
     setExpand(true);
     setFetchResults(fetchResults + 1);
-    postBookstack(bookstack);
+    storeBookstack(bookstack);
   };
 
   return (
