@@ -133,6 +133,7 @@ const Bookstack = props => {
                 <Book
                   className={classes.book}
                   index={i}
+                  labels={i === 0}
                   fetchResults={fetchResults}
                   expand={expand}
                   book={book}
