@@ -1,0 +1,12 @@
+[class*="Book-root"] {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 100ms ease-in, max-height 200ms ease-in;
+}
+
+[class*="Book-root"].book-enter-done,
+[class*="Book-root"].book-enter-active {
+  opacity: 1;
+  max-height: 300px;
+  transition: max-height 200ms ease-in;
+}
