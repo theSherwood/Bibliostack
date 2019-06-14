@@ -1,11 +1,13 @@
-import React, { useEffect, useState, Fragment, useRef } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import Book from "./Book";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { withStyles } from "@material-ui/core";
 import styles from "./BooklistStyles";
 import axios from "axios";
 import uuid from "../../helpers/quickUUID";
+import "./Booklist.css";
 
 const Booklist = props => {
   const { classes } = props;
@@ -95,19 +97,23 @@ const Booklist = props => {
           </Fragment>
         ) : null}
         <Button onClick={handleAddBook}>Add Book</Button>
-        {booklist
-          ? booklist.map((book, i) => (
-              <Book
-                key={book._id}
-                index={i}
-                fetchResults={fetchResults}
-                expand={expand}
-                book={book}
-                updateBooklist={updateBooklist}
-                deleteBook={deleteBook}
-              />
-            ))
-          : null}
+        {booklist ? (
+          <TransitionGroup className="booklist-transition-group">
+            {booklist.map((book, i) => (
+              <CSSTransition classNames="book" timeout={200} key={book._id}>
+                <Book
+                  className={classes.book}
+                  index={i}
+                  fetchResults={fetchResults}
+                  expand={expand}
+                  book={book}
+                  updateBooklist={updateBooklist}
+                  deleteBook={deleteBook}
+                />
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
+        ) : null}
       </Paper>
     </main>
   );
