@@ -18,6 +18,8 @@ const User = mongoose.model("users");
     Australia         | EBAY-AU        |  15
 */
 
+const countriesSet = new Set("EBAY-US EBAY-ENCA EBAY-GB EBAU-AU".split(" "));
+
 // Create a JavaScript array of the item filters you want to use in your request
 function constructFilterArray(maxPrice, currency) {
   return [
@@ -41,13 +43,14 @@ function constructFilterArray(maxPrice, currency) {
 // @desc      Search for book on ebay
 // @access    Public
 router.post("/book", (req, res) => {
-  let { title, author, budget, results } = req.body;
+  let { title, author, budget, results, country } = req.body;
   title = title.trim();
   author = author.trim();
   budget = budget.trim();
   results = results.trim();
   budget = !isNaN(parseFloat(budget)) && isFinite(budget) ? budget : "100000";
   results = !isNaN(parseInt(results)) && isFinite(budget) ? results : "3";
+  country = countriesSet.has(country) ? country : "EBAY-US";
   let searchTerm = title + " " + author;
   if (!searchTerm.trim()) {
     return res.send([]);
@@ -61,7 +64,7 @@ router.post("/book", (req, res) => {
       "X-EBAY-SOA-OPERATION-NAME": "findItemsAdvanced",
       "X-EBAY-SOA-SECURITY-APPNAME": process.env.EBAY_ID,
       "X-EBAY-SOA-REQUEST-DATA-FORMAT": "JSON",
-      "X-EBAY-SOA-GLOBAL-ID": "EBAY-GB"
+      "X-EBAY-SOA-GLOBAL-ID": country
     },
     body: JSON.stringify({
       findItemsAdvancedRequest: {
