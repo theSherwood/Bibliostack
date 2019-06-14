@@ -57,6 +57,8 @@ function reducer(state, action) {
         isAuthenticated: true,
         user: action.payload.id
       };
+    default:
+      throw new Error("must dispatch an action with a type field");
   }
 }
 
