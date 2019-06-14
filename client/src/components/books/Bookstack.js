@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { withStyles } from "@material-ui/core";
+import CountryPicker from "../country/CountryPicker";
 import styles from "./BookstackStyles";
 import axios from "axios";
 import uuid from "../../helpers/quickUUID";
@@ -14,12 +15,21 @@ const Bookstack = props => {
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
   const [bookstack, setBookstack] = useState([]);
-
-  console.log(isAuthenticated);
+  const [countryCode, setCountryCode] = useState("");
 
   useEffect(() => {
+    getCountryCode();
     getBookstack();
   }, []);
+
+  const getCountryCode = () => {
+    setCountryCode(localStorage.getItem("countryCode") || "EBAY-US");
+  };
+
+  const updateCountryCode = code => {
+    localStorage.setItem("countryCode", code);
+    setCountryCode(code);
+  };
 
   const getBookstack = () => {
     isAuthenticated ? getBookstackServer() : getBookstackLocal();
@@ -118,6 +128,10 @@ const Bookstack = props => {
         e.key === "Enter" && handleAddBook();
       }}
     >
+      <CountryPicker
+        countryCode={countryCode}
+        updateCountryCode={updateCountryCode}
+      />
       <Paper className={classes.paper}>
         {bookstack ? (
           <Fragment>
