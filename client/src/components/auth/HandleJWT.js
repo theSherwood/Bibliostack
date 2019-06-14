@@ -10,7 +10,7 @@ const HandleJWT = props => {
   // props.clearAuthErrors();
   // props.history.push("/page-not-found");
   // } else if (props.auth.isAuthenticated) {
-  //   props.history.push("/booklist");
+  //   props.history.push("/bookstack");
   // }
   return <Spinner />;
 };

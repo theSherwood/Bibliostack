@@ -4,43 +4,66 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { withStyles } from "@material-ui/core";
-import styles from "./BooklistStyles";
+import styles from "./BookstackStyles";
 import axios from "axios";
 import uuid from "../../helpers/quickUUID";
-import "./Booklist.css";
+import "./Bookstack.css";
 
-const Booklist = props => {
-  const { classes } = props;
+const Bookstack = props => {
+  const { classes, isAuthenticated } = props;
   const [fetchResults, setFetchResults] = useState(0);
   const [expand, setExpand] = useState(false);
-  const [booklist, setBooklist] = useState([]);
+  const [bookstack, setBookstack] = useState([]);
+
+  console.log(isAuthenticated);
 
   useEffect(() => {
+    getBookstack();
+  }, []);
+
+  const getBookstack = () => {
+    if (isAuthenticated) {
+      getBookstackServer();
+    }
+    getBookstackLocal();
+  };
+
+  const getBookstackServer = () => {
     axios
-      .get("api/books/booklist")
+      .get("api/books/bookstack")
       .then(res => {
-        setBooklist(res.data);
+        console.log(res.data);
+        setBookstack(res.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  };
 
-  const updateBooklist = (book, index) => {
-    const newBooklist = [...booklist];
-    newBooklist[index] = book;
-    setBooklist(newBooklist);
+  const getBookstackLocal = () => {
+    const bookstackStr = localStorage.getItem("bookstack");
+    if (bookstackStr) {
+      setBookstack(JSON.parse(bookstackStr));
+    } else {
+      setBookstack([]);
+    }
+  };
+
+  const updateBookstack = (book, index) => {
+    const newBookstack = [...bookstack];
+    newBookstack[index] = book;
+    setBookstack(newBookstack);
   };
 
   const deleteBook = id => {
-    const newBooklist = booklist.filter(book => book._id !== id);
-    setBooklist(newBooklist);
+    const newBookstack = bookstack.filter(book => book._id !== id);
+    setBookstack(newBookstack);
   };
 
-  const postBooklist = booklist => {
-    let filteredBooklist;
-    if (booklist) {
-      filteredBooklist = booklist.filter(book => {
+  const postBookstack = bookstack => {
+    let filteredBookstack;
+    if (bookstack) {
+      filteredBookstack = bookstack.filter(book => {
         if (Object.keys(book).length) {
           return (
             (book.title && book.title.trim()) ||
@@ -51,17 +74,17 @@ const Booklist = props => {
         return false;
       });
     } else {
-      filteredBooklist = [];
+      filteredBookstack = [];
     }
-    setBooklist(filteredBooklist);
+    setBookstack(filteredBookstack);
     // remove the _ids before it goes to the database
-    const mappedBooklist = filteredBooklist.map(book => ({
+    const mappedBookstack = filteredBookstack.map(book => ({
       title: book.title,
       author: book.author,
       budget: book.budget
     }));
     axios
-      .post("api/books/booklist", { booklist: mappedBooklist })
+      .post("api/books/bookstack", { bookstack: mappedBookstack })
       .then(() => {})
       .catch(err => {
         console.log(err);
@@ -69,17 +92,17 @@ const Booklist = props => {
   };
 
   const handleAddBook = () => {
-    if (booklist) {
-      setBooklist([{ _id: uuid() }, ...booklist]);
+    if (bookstack) {
+      setBookstack([{ _id: uuid() }, ...bookstack]);
     } else {
-      setBooklist([{ _id: uuid() }]);
+      setBookstack([{ _id: uuid() }]);
     }
   };
 
   const fetchAll = () => {
     setExpand(true);
     setFetchResults(fetchResults + 1);
-    postBooklist(booklist);
+    postBookstack(bookstack);
   };
 
   return (
@@ -90,16 +113,16 @@ const Booklist = props => {
       }}
     >
       <Paper className={classes.paper}>
-        {booklist ? (
+        {bookstack ? (
           <Fragment>
             <Button onClick={fetchAll}>Fetch Results</Button>
             <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
           </Fragment>
         ) : null}
         <Button onClick={handleAddBook}>Add Book</Button>
-        {booklist ? (
-          <TransitionGroup className="booklist-transition-group">
-            {booklist.map((book, i) => (
+        {bookstack ? (
+          <TransitionGroup className="bookstack-transition-group">
+            {bookstack.map((book, i) => (
               <CSSTransition classNames="book" timeout={200} key={book._id}>
                 <Book
                   className={classes.book}
@@ -107,7 +130,7 @@ const Booklist = props => {
                   fetchResults={fetchResults}
                   expand={expand}
                   book={book}
-                  updateBooklist={updateBooklist}
+                  updateBookstack={updateBookstack}
                   deleteBook={deleteBook}
                 />
               </CSSTransition>
@@ -119,4 +142,4 @@ const Booklist = props => {
   );
 };
 
-export default withStyles(styles)(Booklist);
+export default withStyles(styles)(Bookstack);

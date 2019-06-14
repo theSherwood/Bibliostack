@@ -101,32 +101,32 @@ router.post("/book", (req, res) => {
     });
 });
 
-// @route     POST /api/books/booklist
+// @route     POST /api/books/bookstack
 // @desc      Save books to database
 // @access    Private
 router.post(
-  "/booklist",
+  "/bookstack",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findById(req.user.id)
       .then(user => {
-        user.booklist = req.body.booklist;
+        user.bookstack = req.body.bookstack;
         user.save().then(() => res.json({ succes: "true" }));
       })
       .catch(err => res.send(err));
   }
 );
 
-// @route     GET /api/books/booklist
+// @route     GET /api/books/bookstack
 // @desc      Get books from database
 // @access    Private
 router.get(
-  "/booklist",
+  "/bookstack",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findById(req.user.id)
       .then(user => {
-        res.json(user.booklist);
+        res.json(user.bookstack);
       })
       .catch(err => res.send(err));
   }

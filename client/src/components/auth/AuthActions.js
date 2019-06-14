@@ -22,7 +22,7 @@ export const handleJWT = (token, history, dispatch) => {
   });
 
   // Redirect to challenges
-  // if (success) history.push("/booklist");
+  // if (success) history.push("/bookstack");
 };
 
 // props.handleJWT(props.match.params.token, props.history);

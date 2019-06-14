@@ -8,7 +8,7 @@ const ProtectedRoute = ({
   ...rest
 }) =>
   accessType === "guest" ? (
-    // Guest only routes redirect to booklist
+    // Guest only routes redirect to bookstack
     <Route
       {...rest}
       render={props =>

@@ -44,7 +44,7 @@ const Book = props => {
     classes,
     expand,
     book,
-    updateBooklist,
+    updateBookstack,
     deleteBook,
     index
   } = props;
@@ -145,7 +145,7 @@ const Book = props => {
                   className={classes.textField}
                   autoFocus
                   onBlur={() =>
-                    updateBooklist(
+                    updateBookstack(
                       { title, author, budget, _id: book._id },
                       index
                     )
@@ -158,7 +158,7 @@ const Book = props => {
                   onChange={e => setAuthor(e.target.value)}
                   className={classes.textField}
                   onBlur={() =>
-                    updateBooklist(
+                    updateBookstack(
                       { title, author, budget, _id: book._id },
                       index
                     )
@@ -171,7 +171,7 @@ const Book = props => {
                   onChange={e => setBudget(e.target.value)}
                   className={classes.textField}
                   onBlur={() =>
-                    updateBooklist(
+                    updateBookstack(
                       { title, author, budget, _id: book._id },
                       index
                     )
@@ -185,7 +185,7 @@ const Book = props => {
                   className="deleteButton"
                   onClick={() => deleteBook(book._id)}
                 >
-                  <CloseIcon className="deleteButton" />
+                  <CloseIcon />
                 </IconButton>
               </div>
               <div className={classes.placeCenter}>

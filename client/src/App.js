@@ -9,7 +9,7 @@ import Footer from "./components/layout/Footer";
 import HandleJWT from "./components/auth/HandleJWT";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import NotFound from "./components/routing/NotFound";
-import Booklist from "./components/books/Booklist";
+import Bookstack from "./components/books/Bookstack";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider } from "@material-ui/core/styles";
@@ -88,7 +88,7 @@ function App(props) {
               <Route
                 exact
                 path="/"
-                render={props => <Booklist {...state} {...props} />}
+                render={props => <Bookstack {...state} {...props} />}
               />
               <Route path="/" component={NotFound} />
             </Switch>

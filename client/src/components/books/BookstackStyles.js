@@ -38,5 +38,8 @@ export default theme => ({
   },
   submit: {
     marginTop: theme.spacing.unit * 3
+  },
+  book: {
+    transition: "opacity 2000ms ease-in"
   }
 });
