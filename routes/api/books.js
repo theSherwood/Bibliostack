@@ -74,9 +74,7 @@ router.post("/book", (req, res) => {
   })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
       const results = data.findItemsAdvancedResponse[0].searchResult[0].item;
-      console.log(results);
       return res.json(results);
     })
     .catch(err => console.log(err));
