@@ -1,8 +1,17 @@
 import React, { useState } from "react";
+import { withStyles } from "@material-ui/core";
 import IconAU from "./IconAU";
 import IconCA from "./IconCA";
 import IconUK from "./IconUK";
 import IconUS from "./IconUS";
+
+const styles = theme => ({
+  invsblebtn: {
+    outline: "none",
+    background: "transparent",
+    border: "none"
+  }
+});
 
 const countries = {
   "EBAY-US": IconUS,
@@ -13,7 +22,7 @@ const countries = {
 
 const getIcon = countryCode => countries[countryCode] || countries["EBAY-US"];
 
-const CountryPicker = ({ countryCode, updateCountryCode }) => {
+const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
   const [showIcons, setShowIcons] = useState(false);
 
   const CountryIcon = getIcon(countryCode);
@@ -24,7 +33,7 @@ const CountryPicker = ({ countryCode, updateCountryCode }) => {
 
   return (
     <div>
-      <button onClick={handleClick}>
+      <button className={classes.invsblebtn} onClick={handleClick}>
         <CountryIcon size="24" />
       </button>
 
@@ -32,7 +41,7 @@ const CountryPicker = ({ countryCode, updateCountryCode }) => {
         ? Object.entries(countries)
             .filter(([code, Icon]) => code !== countryCode)
             .map(([code, Icon]) => (
-              <button onClick={handleClick}>
+              <button className={classes.invsblebtn} onClick={handleClick}>
                 <Icon size="24" />
               </button>
             ))
@@ -43,4 +52,4 @@ const CountryPicker = ({ countryCode, updateCountryCode }) => {
   );
 };
 
-export default CountryPicker;
+export default withStyles(styles)(CountryPicker);
