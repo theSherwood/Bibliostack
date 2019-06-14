@@ -10,7 +10,8 @@ const IconUK = ({ size }) => (
     y="0px"
     viewBox="0 0 512 512"
     style={{
-      enableBackground: "new 0 0 512 512"
+      enableBackground: "new 0 0 512 512",
+      verticalAlign: "middle"
     }}
     xmlSpace="preserve"
     width={size}
