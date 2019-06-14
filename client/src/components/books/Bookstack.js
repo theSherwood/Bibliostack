@@ -28,8 +28,7 @@ const Bookstack = props => {
     axios
       .get("api/books/bookstack")
       .then(res => {
-        console.log(res.data);
-        setBookstack(res.data);
+        setBookstack([{ _id: uuid() }, ...res.data]);
       })
       .catch(err => {
         console.log(err);
@@ -38,9 +37,9 @@ const Bookstack = props => {
   const getBookstackLocal = () => {
     const bookstackStr = localStorage.getItem("bookstack");
     if (bookstackStr) {
-      setBookstack(JSON.parse(bookstackStr));
+      setBookstack([{ _id: uuid() }, ...JSON.parse(bookstackStr)]);
     } else {
-      setBookstack([]);
+      setBookstack([{ _id: uuid() }]);
     }
   };
 
