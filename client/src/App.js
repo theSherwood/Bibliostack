@@ -6,7 +6,6 @@ import jwt_decode from "jwt-decode";
 import Auth from "./components/auth/Auth";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import Home from "./components/home/Home";
 import HandleJWT from "./components/auth/HandleJWT";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import NotFound from "./components/routing/NotFound";
@@ -65,17 +64,14 @@ function App(props) {
   const { classes } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  console.log(typeof dispatch);
-
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <div className={"App " + classes.app}>
-          <Header dispatch={dispatch} />
+          <Header dispatch={dispatch} state={state} />
           <div>
             <Switch>
-              {/* <Route exact path="/" component={Home} /> */}
               <ProtectedRoute
                 exact
                 path="/sign/:type"
@@ -84,7 +80,6 @@ function App(props) {
                 isAuthenticated={state.isAuthenticated}
                 component={Auth}
               />
-              } />
               <Route
                 exact
                 path="/jwt/:token"
@@ -92,7 +87,7 @@ function App(props) {
               />
               <Route
                 exact
-                path="/booklist"
+                path="/"
                 render={props => <Booklist {...state} {...props} />}
               />
               <Route path="/" component={NotFound} />
