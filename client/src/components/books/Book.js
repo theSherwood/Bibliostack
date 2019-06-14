@@ -15,6 +15,10 @@ import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import styles from "./BookStyles.js";
 
+const $symbols = {
+  USD: "$"
+};
+
 const initialState = {
   fetching: false,
   ebayBookResult: null,
@@ -46,7 +50,8 @@ const Book = props => {
     book,
     updateBookstack,
     deleteBook,
-    index
+    index,
+    labels
   } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
   const { ebayBookResult, fetching, error } = state;
@@ -100,14 +105,15 @@ const Book = props => {
           <ul className={classes.ul}>
             {ebayBookResult.map(book => {
               const currentPrice = book.sellingStatus[0].currentPrice[0];
-              const currency = currentPrice["@currencyId"];
+              const currency = $symbols[currentPrice["@currencyId"]];
               const value = currentPrice["__value__"];
               const url = book.viewItemURL[0];
               return (
                 <li key={book.itemId[0]} className={classes.li}>
                   <Grid container wrap="nowrap" spacing={0}>
                     <Grid item xs zeroMinWidth>
-                      {currency} {value + " : "}
+                      {currency}
+                      {value + " : "}
                       <Typography noWrap={true}>
                         <Link
                           href={url}
@@ -137,12 +143,13 @@ const Book = props => {
           onClick={handlePanelClick}
         >
           <div className={classes.grow}>
-            <Grid container spacing={8}>
+            <Grid container spacing={16} alignItems="center">
               <Grid item xs={12} sm={4}>
                 <TextField
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   className={classes.textField}
+                  label={labels ? "title" : null}
                   autoFocus
                   onBlur={() =>
                     updateBookstack(
@@ -157,6 +164,7 @@ const Book = props => {
                   value={author}
                   onChange={e => setAuthor(e.target.value)}
                   className={classes.textField}
+                  label={labels ? "author" : null}
                   onBlur={() =>
                     updateBookstack(
                       { title, author, budget, _id: book._id },
@@ -170,6 +178,7 @@ const Book = props => {
                   value={budget}
                   onChange={e => setBudget(e.target.value)}
                   className={classes.textField}
+                  label={labels ? "budget" : null}
                   onBlur={() =>
                     updateBookstack(
                       { title, author, budget, _id: book._id },
