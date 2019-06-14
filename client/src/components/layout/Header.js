@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -25,8 +25,6 @@ const styles = {
 
 function Header(props) {
   const { classes, dispatch, state } = props;
-
-  const [isCollapsed, setIsCollapsed] = useState(true);
 
   // Sign Out user
   const signOutUser = () => {
@@ -59,7 +57,7 @@ function Header(props) {
             </Button>
           ) : (
             <Fragment>
-              <Button color="inherit" onClick={signOutUser}>
+              <Button color="inherit">
                 <Link
                   component={RouterLink}
                   to="/sign/in"
@@ -69,7 +67,7 @@ function Header(props) {
                   Sign In
                 </Link>
               </Button>
-              <Button color="inherit" onClick={signOutUser}>
+              <Button color="inherit">
                 <Link
                   component={RouterLink}
                   to="/sign/up"
