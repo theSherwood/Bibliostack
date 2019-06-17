@@ -26,6 +26,16 @@ const styles = {
     [theme.breakpoints.down(600)]: {
       paddingBottom: 40
     }
+  },
+  backdrop: {
+    position: "fixed",
+    height: "100vh",
+    width: "100vw",
+    top: "0",
+    left: "0",
+    background: "rgb(177,102,138)",
+    background:
+      "linear-gradient(130deg, rgba(177,102,138,1) 0%, rgba(241,131,137,1) 31%, rgba(255,137,137,1) 49%, rgba(254,145,138,1) 59%, rgba(246,204,144,1) 100%)"
   }
 };
 
@@ -70,6 +80,7 @@ function App(props) {
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <div className={classes.backdrop} />
         <div className={"App " + classes.app}>
           <Header dispatch={dispatch} state={state} />
           <div>
