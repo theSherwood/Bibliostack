@@ -20,7 +20,9 @@ export default theme => ({
     flexDirection: "column",
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
       .spacing.unit * 3}px`,
+    marginBottom: theme.spacing.unit * 6,
     [theme.breakpoints.down(600)]: {
+      paddingTop: 0,
       paddingLeft: theme.spacing.unit,
       paddingRight: theme.spacing.unit,
       marginTop: 0
