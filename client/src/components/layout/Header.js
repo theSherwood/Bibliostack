@@ -20,6 +20,10 @@ const styles = {
   menuButton: {
     marginLeft: -12,
     marginRight: 20
+  },
+  appbar: {
+    background: "transparent",
+    boxShadow: "none"
   }
 };
 
@@ -39,18 +43,22 @@ function Header(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appbar}>
         <Toolbar>
-          <Typography variant="h6" color="inherit" className={classes.grow}>
-            <Link
-              component={RouterLink}
-              to="/"
-              color="inherit"
-              underline="none"
-            >
-              BiblioStack
-            </Link>
-          </Typography>
+          <div className={classes.grow}>
+            <Button color="inherit">
+              <Typography color="inherit">
+                <Link
+                  component={RouterLink}
+                  to="/"
+                  color="inherit"
+                  underline="none"
+                >
+                  BiblioStack
+                </Link>
+              </Typography>
+            </Button>
+          </div>
           {state.isAuthenticated ? (
             <Button color="inherit" onClick={signOutUser}>
               Sign Out
@@ -60,21 +68,18 @@ function Header(props) {
               <Button color="inherit">
                 <Link
                   component={RouterLink}
-                  to="/sign/in"
+                  to={
+                    "/sign/" +
+                    (props.history.location.pathname.slice(-2) === "up"
+                      ? "in"
+                      : "up")
+                  }
                   color="inherit"
                   underline="none"
                 >
-                  Sign In
-                </Link>
-              </Button>
-              <Button color="inherit">
-                <Link
-                  component={RouterLink}
-                  to="/sign/up"
-                  color="inherit"
-                  underline="none"
-                >
-                  Sign Up
+                  {props.history.location.pathname.slice(-2) === "in"
+                    ? "Sign Up"
+                    : "Sign In"}
                 </Link>
               </Button>
             </Fragment>
