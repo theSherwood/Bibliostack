@@ -119,7 +119,9 @@ const Book = props => {
                 <li key={book.itemId[0]} className={classes.li}>
                   <Grid container wrap="nowrap" spacing={0}>
                     <Grid item xs zeroMinWidth>
-                      {currency} {value + " : "}
+                      <Typography variant="h6">
+                        {currency} {value + " : "}
+                      </Typography>
                       <Typography noWrap={true}>
                         <Link
                           href={url}
@@ -143,7 +145,11 @@ const Book = props => {
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel expanded={expanded} square>
+      <ExpansionPanel
+        expanded={expanded}
+        square
+        className={classes.expandpanel}
+      >
         <ExpansionPanelSummary
           className={classes.summary}
           onClick={handlePanelClick}
@@ -211,14 +217,14 @@ const Book = props => {
             <Grid container className={classes.buttonContainer}>
               <div className={classes.placeCenter}>
                 <IconButton
-                  className="deleteButton"
+                  className={"deleteButton " + classes.iconButton}
                   onClick={() => deleteBook(book._id)}
                 >
                   <CloseIcon />
                 </IconButton>
               </div>
               <div className={classes.placeCenter}>
-                <IconButton>
+                <IconButton className={classes.iconButton}>
                   <ExpandMoreIcon className={expanded ? classes.less : null} />
                 </IconButton>
               </div>
@@ -227,8 +233,10 @@ const Book = props => {
         </ExpansionPanelSummary>
         {fetching || error || resultsContent ? (
           <ExpansionPanelDetails className={classes.details}>
-            {fetching ? <p>Fetching results...</p> : null}
-            {error ? error.message : resultsContent}
+            <Typography>
+              {fetching ? <p>Fetching results...</p> : null}
+              {error ? error.message : resultsContent}
+            </Typography>
           </ExpansionPanelDetails>
         ) : null}
         <ExpansionPanelActions className={classes.actions}>

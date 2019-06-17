@@ -1,13 +1,28 @@
 export default theme => ({
   root: {
-    width: "100%"
+    width: "100%",
+    height: "max-content",
+    opacity: "0",
+    transition: "opacity 200ms ease-in",
+    "&.book-enter-active": {
+      border: ""
+    },
+    "&.book-enter-done": {
+      opacity: "1"
+    }
   },
   expandpanel: {
     background: "transparent",
     boxShadow: "none"
   },
   summary: {
-    background: "rgba(255,255,255,0.3)",
+    boxShadow:
+      "0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12)",
+    background: "transparent",
+    "&:hover": {
+      background: "rgba(255,255,255,.3)"
+    },
+    // background: "rgba(255,255,255,0.3) !important",
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     borderRadius: "10000px",
@@ -65,8 +80,8 @@ export default theme => ({
   },
   textField: {
     width: "100%",
-    "& input": {
-      color: "#ffffff"
+    "& div::before": {
+      borderBottom: "solid 1px white"
     }
   },
   ul: {
@@ -96,5 +111,17 @@ export default theme => ({
   },
   less: {
     transform: "rotate(180deg)"
+  },
+  iconButton: {
+    color: "transparent",
+    "&:hover": {
+      background: "rgba(255,255,255,0.3)"
+    },
+    "&:active": {
+      background: "rgba(255,255,255,0.3)"
+    },
+    "&:focus": {
+      background: "rgba(255,255,255,0.3)"
+    }
   }
 });
