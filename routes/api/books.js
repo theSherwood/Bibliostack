@@ -21,13 +21,11 @@ const User = mongoose.model("users");
 const countriesSet = new Set("EBAY-US EBAY-ENCA EBAY-GB EBAU-AU".split(" "));
 
 // Create a JavaScript array of the item filters you want to use in your request
-function constructFilterArray(maxPrice, currency) {
+function constructFilterArray(maxPrice) {
   return [
     {
       name: "MaxPrice",
-      value: maxPrice,
-      paramName: "Currency",
-      paramValue: currency
+      value: maxPrice
     },
     { name: "FreeShippingOnly", value: "true", paramName: "", paramValue: "" },
     {
@@ -56,8 +54,6 @@ router.post("/book", (req, res) => {
     return res.send([]);
   }
 
-  const filterarray = constructFilterArray(budget, "USD");
-
   fetch("https://svcs.ebay.com/services/search/FindingService/v1", {
     method: "POST",
     headers: {
@@ -70,7 +66,7 @@ router.post("/book", (req, res) => {
       findItemsAdvancedRequest: {
         categoryId: "267",
         paginationInput: { entriesPerPage: results },
-        itemFilter: [{ name: "MaxPrice", value: budget }],
+        itemFilter: constructFilterArray(budget),
         keywords: title + " " + author
       }
     })
