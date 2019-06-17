@@ -2,12 +2,19 @@ export default theme => ({
   root: {
     width: "100%"
   },
+  expandpanel: {
+    background: "transparent",
+    boxShadow: "none"
+  },
   summary: {
-    boxShadow:
-      "0px 1px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)",
+    background: "rgba(255,255,255,0.3)",
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    borderRadius: "10000px",
     [theme.breakpoints.down(600)]: {
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2
+      paddingLeft: theme.spacing.unit,
+      paddingRight: theme.spacing.unit,
+      borderRadius: "15px"
     }
   },
   heading: {
@@ -57,7 +64,10 @@ export default theme => ({
     }
   },
   textField: {
-    width: "100%"
+    width: "100%",
+    "& input": {
+      color: "#ffffff"
+    }
   },
   ul: {
     padding: 0,
