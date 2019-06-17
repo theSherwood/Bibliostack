@@ -97,6 +97,7 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
               key={code}
               className={`${classes.invsblebtn} alternate`}
               onClick={() => handleClick(code)}
+              aria-label={"country code: " + code}
             >
               <Icon size="24" />
               <div className={classes.buttonOverlay} />
@@ -106,12 +107,11 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
         <button
           className={`${classes.invsblebtn} primary`}
           onClick={() => handleClick(countryCode)}
+          aria-label={"country code: " + countryCode}
         >
           <CountryIcon size="24" />
           <div className={classes.buttonOverlay} />
         </button>
-
-        {/* <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> */}
       </div>
     </div>
   );
