@@ -3,12 +3,11 @@ import Book from "./Book";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Typography } from "@material-ui/core";
 import CountryPicker from "../country/CountryPicker";
 import styles from "./BookstackStyles";
 import axios from "axios";
 import uuid from "../../helpers/quickUUID";
-import "./Bookstack.css";
 
 const getCountryCode = () => {
   return localStorage.getItem("countryCode") || "EBAY-US";
@@ -132,13 +131,25 @@ const Bookstack = props => {
         updateCountryCode={updateCountryCode}
       />
       <Paper className={classes.paper}>
+        {isAuthenticated ? null : (
+          <p style={{ textAlign: "center", color: "white" }}>
+            You are not signed in. Your stack of books will not be saved to your
+            account.
+          </p>
+        )}
         {bookstack ? (
           <Fragment>
-            <Button onClick={fetchAll}>Fetch Results</Button>
-            <Button onClick={() => setExpand(!expand)}>Toggle Collapse</Button>
+            <Button onClick={fetchAll}>
+              <Typography variant="h6">Fetch Results</Typography>
+            </Button>
+            <Button onClick={() => setExpand(!expand)}>
+              <Typography variant="h6">Collapse All</Typography>
+            </Button>
           </Fragment>
         ) : null}
-        <Button onClick={handleAddBook}>Add Book</Button>
+        <Button onClick={handleAddBook}>
+          <Typography variant="h6">Add Book</Typography>
+        </Button>
         {bookstack ? (
           <TransitionGroup className="bookstack-transition-group">
             {bookstack.map((book, i) => (
