@@ -12,18 +12,19 @@ const styles = theme => ({
     background: "transparent",
     border: "none",
     borderRadius: "100%",
-    boxShadow: "0 0 15px 5px rgba(0, 0, 0, 0.25)",
+    boxShadow: "0 0 10px 3px rgba(0, 0, 0, 0.25)",
     padding: 0,
     width: "min-content",
     margin: theme.spacing.unit,
-    transition: "transform 100ms ease-in",
+    filter: "saturate(0.4)",
+    transition: "transform 100ms ease-in, filter 100ms ease-in",
     "&:hover": {
-      transform: "scale(1.25)"
+      transform: "scale(1.25)",
+      filter: "saturate(1)"
     }
   },
   countrypicker: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    margin: theme.spacing.unit,
     width: "max-content",
     "& .alternate": {
       transition: "transform 100ms ease-in",
@@ -40,6 +41,9 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end"
+  },
+  buttonOverlay: {
+    position: "absolute"
   }
 });
 
@@ -95,6 +99,7 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
               onClick={() => handleClick(code)}
             >
               <Icon size="24" />
+              <div className={classes.buttonOverlay} />
             </button>
           );
         })}
@@ -103,6 +108,7 @@ const CountryPicker = ({ countryCode, updateCountryCode, classes }) => {
           onClick={() => handleClick(countryCode)}
         >
           <CountryIcon size="24" />
+          <div className={classes.buttonOverlay} />
         </button>
 
         {/* <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> */}
