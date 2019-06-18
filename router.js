@@ -35,8 +35,4 @@ require("./config/passport")(passport);
 app.use("/api/auth", auth);
 app.use("/api/books", books);
 
-app.get("*", (req, res) => {
-  res.json({ success: "connected to router" });
-});
-
 module.exports = app;
