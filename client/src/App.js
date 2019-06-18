@@ -6,7 +6,6 @@ import jwt_decode from "jwt-decode";
 import Auth from "./components/auth/Auth";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import HandleJWT from "./components/auth/HandleJWT";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import NotFound from "./components/routing/NotFound";
 import Bookstack from "./components/books/Bookstack";
@@ -92,11 +91,6 @@ function App(props) {
                 dispatch={dispatch}
                 isAuthenticated={state.isAuthenticated}
                 component={Auth}
-              />
-              <Route
-                exact
-                path="/jwt/:token"
-                render={() => <HandleJWT dispatch={dispatch} />}
               />
               <Route
                 exact
