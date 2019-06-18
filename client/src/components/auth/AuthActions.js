@@ -20,18 +20,7 @@ export const handleJWT = (token, history, dispatch) => {
     type: "signin",
     payload: decodedUser
   });
-
-  // Redirect to challenges
-  // if (success) history.push("/bookstack");
 };
-
-// props.handleJWT(props.match.params.token, props.history);
-// if (Object.keys(props.auth.errors).length > 0) {
-//   props.clearAuthErrors();
-//   props.history.push("/page-not-found");
-// } else if (props.auth.isAuthenticated) {
-//   props.history.push("/");
-// }
 
 // Sign In User
 export const signInUser = (formData, history, dispatch) => {
@@ -45,7 +34,7 @@ export const signInUser = (formData, history, dispatch) => {
     .catch(err => err);
 };
 
-// Sign Up user
+// Sign Up User
 export const signUpUser = (formData, history, dispatch) => {
   return axios
     .post("/api/auth/signup", formData)
