@@ -110,4 +110,8 @@ router.get(
   }
 );
 
+router.get("/test", (req, res) => {
+  res.json({ test: "success" });
+});
+
 module.exports = router;
