@@ -1,0 +1,73 @@
+{
+  "version": 2,
+  "alias": "www.bibliostack.com",
+  "name": "bibliostack",
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@now/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
+      "src": "/router.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api(.*)",
+      "dest": "/router.js"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "client/static/$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "client/manifest.json"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "client/favicon.ico"
+    },
+    {
+      "src": "/(.*).png",
+      "dest": "client/$1.png"
+    },
+    {
+      "src": "/(.*).svg",
+      "dest": "client/$1.svg"
+    },
+    {
+      "src": "/(.*).xml",
+      "dest": "client/$1.xml"
+    },
+    {
+      "src": "/site.webmanifest",
+      "dest": "client/site.webmanifest"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "client/manifest.json"
+    },
+    {
+      "src": "/service-worker.js",
+      "dest": "client/service-worker.js"
+    },
+    {
+      "src": "/precache(.*).js",
+      "dest": "client/precache$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/index.html"
+    }
+  ],
+  "env": {
+    "JWT_SECRET": "@jwt_secret_bibliostack",
+    "EBAY_ID": "@ebay_id_bibliostack",
+    "MONGO_URI": "@mongo_uri_bibliostack"
+  }
+}
