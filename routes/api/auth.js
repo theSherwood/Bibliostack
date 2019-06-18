@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 // Load Validation
 const validateSignUpInput = require("../../validation/signup");
 const validateSignInInput = require("../../validation/signin");
 
-// Load User Model
-const User = require("../../models/User");
+// Load User Schema
+const User = mongoose.model("users");
 
 // @route     POST /api/auth/signin
 // @desc      Sign in for email and password
@@ -94,6 +95,10 @@ router.post("/signup", (req, res) => {
       });
     }
   });
+});
+
+router.get("*", (req, res) => {
+  res.json({ success: "connected to auth api" });
 });
 
 module.exports = router;
