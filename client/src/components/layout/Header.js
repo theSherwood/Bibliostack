@@ -70,9 +70,9 @@ function Header(props) {
                   component={RouterLink}
                   to={
                     "/sign/" +
-                    (props.history.location.pathname.slice(-2) === "up"
-                      ? "in"
-                      : "up")
+                    (props.history.location.pathname.slice(-2) === "in"
+                      ? "up"
+                      : "in")
                   }
                   color="inherit"
                   underline="none"
