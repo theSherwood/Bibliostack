@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles, Typography, Link } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   footer: {
@@ -12,7 +12,7 @@ const styles = theme => ({
     justifyContent: "space-between",
     flexWrap: "wrap"
   },
-  typo: {
+  type: {
     paddingLeft: theme.spacing.unit,
     paddingRight: theme.spacing.unit
   }
@@ -21,21 +21,39 @@ const styles = theme => ({
 function Footer({ classes }) {
   return (
     <footer className={classes.footer}>
-      <Typography className={classes.typo}>
-        Copyright &copy; 2019 Adam Sherwood
-      </Typography>
-      <Typography className={classes.typo}>
+      <span className={classes.type}>
+        Copyright &copy; 2019{" "}
+        <a
+          href="https://github.com/theSherwood"
+          title="Freepik"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Adam Sherwood
+        </a>
+      </span>
+      <span className={classes.type}>
         <span>
           Icons made by{" "}
-          <Link href="https://www.freepik.com/" title="Freepik">
+          <a
+            href="https://www.freepik.com/"
+            title="Freepik"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Freepik
-          </Link>{" "}
+          </a>{" "}
           from{" "}
-          <Link href="https://www.flaticon.com/" title="Flaticon">
+          <a
+            href="https://www.flaticon.com/"
+            title="Flaticon"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             www.flaticon.com
-          </Link>
+          </a>
         </span>
-      </Typography>
+      </span>
     </footer>
   );
 }
