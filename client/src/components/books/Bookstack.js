@@ -1,13 +1,13 @@
 import React, { useEffect, useState, Fragment } from "react";
 import Book from "./Book";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { withStyles, Typography } from "@material-ui/core";
+import { withStyles, Typography, Link } from "@material-ui/core";
 import CountryPicker from "../country/CountryPicker";
 import styles from "./BookstackStyles";
 import axios from "axios";
 import uuid from "../../helpers/quickUUID";
+import { Link as RouterLink } from "react-router-dom";
 
 const getCountryCode = () => {
   return localStorage.getItem("countryCode") || "EBAY-US";
@@ -130,11 +130,10 @@ const Bookstack = props => {
         countryCode={countryCode}
         updateCountryCode={updateCountryCode}
       />
-      <Paper className={classes.paper}>
+      <div className={classes.paper}>
         {isAuthenticated ? null : (
           <p style={{ textAlign: "center", color: "white" }}>
-            You are not signed in. Your stack of books will not be saved to your
-            account.
+            You are not signed in. Your books cannot be saved to your account.
           </p>
         )}
         {bookstack ? (
@@ -169,7 +168,7 @@ const Bookstack = props => {
             ))}
           </TransitionGroup>
         ) : null}
-      </Paper>
+      </div>
     </main>
   );
 };
